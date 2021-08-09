@@ -1,12 +1,19 @@
 import App from "app/App"
 import React from "react"
 import ReactDOM from "react-dom"
+import { QueryClient, QueryClientProvider } from "react-query"
+import { ReactQueryDevtools } from "react-query/devtools"
 import "./index.css"
 import reportWebVitals from "./reportWebVitals"
 
+const queryClient = new QueryClient()
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+      <ReactQueryDevtools position="bottom-right" />
+    </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById("root")
 )
