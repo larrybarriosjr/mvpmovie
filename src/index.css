@@ -56,8 +56,7 @@ html {
   word-break: break-word; /* 6 */
   color-adjust: exact; /* 7 */
   -webkit-print-color-adjust: exact; /* 7 */
-  font-family: "Raleway", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
-    Arial, sans-serif; /* 8 */
+  font-family: "Raleway", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif; /* 8 */
 }
 
 /* Sections
