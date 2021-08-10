@@ -1,13 +1,28 @@
-export enum NavItem {
+export enum RouteName {
   HOME = "Home",
   POPULAR = "Popular",
   TOP_RATED = "Top Rated",
   FAVORITES = "Favorites"
 }
 
-export enum NavItemPath {
+export enum RoutePath {
   HOME = "/",
   POPULAR = "/popular",
   TOP_RATED = "/top-rated",
-  FAVORITES = "/favorites"
+  FAVORITES = "/favorites",
+  DETAILS = "/movie"
+}
+
+export enum ApiRouteKey {
+  POPULAR = "popular",
+  TOP_RATED = "top_rated"
+}
+
+export enum ApiRoutePath {
+  POPULAR = "/movie/popular",
+  TOP_RATED = "/movie/top_rated"
+}
+
+export enum LocalStorageKey {
+  FAVORITES = "favorites"
 }

@@ -7,7 +7,16 @@ import { BrowserRouter } from "react-router-dom"
 import "./index.css"
 import reportWebVitals from "./reportWebVitals"
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+      refetchOnMount: false,
+      refetchOnReconnect: "always",
+      refetchOnWindowFocus: "always"
+    }
+  }
+})
 
 ReactDOM.render(
   <React.StrictMode>

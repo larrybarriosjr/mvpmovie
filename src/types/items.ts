@@ -1,6 +1,6 @@
-import { NavItem } from "constants/enum"
+import { RouteName, RoutePath } from "constants/enum"
 
-export type NavItemType = {
-  name: NavItem
-  url: string
+export type RouteItemType = {
+  name: RouteName
+  url: RoutePath
 }
