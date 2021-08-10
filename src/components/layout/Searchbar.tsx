@@ -5,7 +5,7 @@ const Searchbar = () => {
   const [value, setValue] = useState<string>("")
 
   const inputClasses = clsx([
-    "px-4 py-2 text-white bg-black border-2 rounded-full outline-none border-gray focus:border-primary",
+    "px-4 py-2 bg-black border-2 rounded-full outline-none border-gray focus:border-primary",
     { "font-bold": value }
   ])
 

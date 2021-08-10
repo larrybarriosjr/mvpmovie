@@ -18,7 +18,7 @@ const Navbar = () => {
     <nav className="flex items-center justify-between w-full max-w-5xl p-4 mx-auto">
       <Logo />
       <Searchbar />
-      <ul className="flex text-white gap-x-4 lg:gap-x-16">
+      <ul className="flex gap-x-4 lg:gap-x-16">
         {routes.map((item, idx) => (
           <li key={idx} className={navItemClasses(item.url)}>
             <Link to={item.url}>{item.name}</Link>
