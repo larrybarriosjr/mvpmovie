@@ -13,16 +13,16 @@ type SectionProps = {
 
 const Section = ({ title, url, items, quantity }: SectionProps) => {
   return (
-    <section>
+    <section className="my-8">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">{title}</h2>
         <Link to={url} className="text-sm border-b hover:text-primary">
           View All
         </Link>
       </div>
-      <ul className="flex flex-wrap justify-between my-4 text-center">
+      <ul className="flex flex-wrap justify-between my-4 text-center gap-y-6">
         {items.slice(0, quantity).map((movie: MovieType) => (
-          <li key={movie.id} className="flex flex-col gap-1 mx-auto">
+          <li key={movie.id} className="flex flex-col gap-2 mx-auto">
             <Link to="" className="p-1 cursor-pointer hover:ring-4 hover:ring-primary">
               <img
                 src={IMAGE_URL + movie.poster_path}
