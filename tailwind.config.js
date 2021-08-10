@@ -8,5 +8,9 @@ module.exports = {
       white: "#ffffff",
       gray: "#333333"
     }
+  },
+  variants: {
+    ringColor: ["hover"],
+    ringWidth: ["hover"]
   }
 }

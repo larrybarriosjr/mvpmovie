@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="flex flex-col w-full min-h-screen text-white bg-black">
       <Navbar />
-      <main className="flex-grow">
+      <main className="flex-grow w-full max-w-5xl mx-auto my-8">
         <Switch>
           <Route exact path={RoutePath.HOME} component={HomePage} />
         </Switch>
