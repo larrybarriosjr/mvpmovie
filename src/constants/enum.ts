@@ -11,3 +11,11 @@ export enum RoutePath {
   TOP_RATED = "/top-rated",
   FAVORITES = "/favorites"
 }
+
+export enum ApiRouteKey {
+  POPULAR = "popular"
+}
+
+export enum ApiRoutePath {
+  POPULAR = "/movie/popular"
+}
