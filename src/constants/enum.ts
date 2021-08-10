@@ -9,7 +9,8 @@ export enum RoutePath {
   HOME = "/",
   POPULAR = "/popular",
   TOP_RATED = "/top-rated",
-  FAVORITES = "/favorites"
+  FAVORITES = "/favorites",
+  DETAILS = "/movie"
 }
 
 export enum ApiRouteKey {
@@ -20,4 +21,8 @@ export enum ApiRouteKey {
 export enum ApiRoutePath {
   POPULAR = "/movie/popular",
   TOP_RATED = "/movie/top_rated"
+}
+
+export enum LocalStorageKey {
+  FAVORITES = "favorites"
 }
