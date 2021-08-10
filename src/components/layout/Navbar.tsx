@@ -15,16 +15,18 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="flex items-center justify-between w-full max-w-5xl p-4 mx-auto">
-      <Logo />
-      <Searchbar />
-      <ul className="flex gap-x-4 lg:gap-x-16">
-        {routes.map((item, idx) => (
-          <li key={idx} className={navItemClasses(item.url)}>
-            <Link to={item.url}>{item.name}</Link>
-          </li>
-        ))}
-      </ul>
+    <nav className="fixed z-10 w-screen p-4 bg-black border-b h-30 border-gray">
+      <div className="flex items-center justify-between max-w-5xl mx-auto">
+        <Logo />
+        <Searchbar />
+        <ul className="flex gap-x-4 lg:gap-x-16">
+          {routes.map((item, idx) => (
+            <li key={idx} className={navItemClasses(item.url)}>
+              <Link to={item.url}>{item.name}</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   )
 }
