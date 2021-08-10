@@ -16,7 +16,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed z-10 w-screen p-4 bg-black border-b h-30 border-gray">
-      <div className="flex items-center justify-between max-w-5xl mx-auto">
+      <div className="flex items-center justify-between max-w-5xl pr-4 mx-auto">
         <Logo />
         <Searchbar />
         <ul className="flex gap-x-4 lg:gap-x-16">
