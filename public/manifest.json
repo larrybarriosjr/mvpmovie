@@ -1,15 +1,14 @@
 {
-  "background_color": "#ffffff",
+  "background_color": "#000000",
   "display": "standalone",
   "icons": [
     {
-      "sizes": "64x64 32x32 24x24 16x16",
-      "src": "favicon.ico",
-      "type": "image/x-icon"
+      "sizes": "192x192",
+      "src": "/android-chrome-192x192.png",
+      "type": "image/png"
     }
   ],
   "name": "MVP Movie",
   "short_name": "MVP Movie",
-  "start_url": ".",
   "theme_color": "#000000"
 }
