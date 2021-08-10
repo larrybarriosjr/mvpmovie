@@ -3,6 +3,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { ReactQueryDevtools } from "react-query/devtools"
+import { BrowserRouter } from "react-router-dom"
 import "./index.css"
 import reportWebVitals from "./reportWebVitals"
 
@@ -11,7 +12,9 @@ const queryClient = new QueryClient()
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
       <ReactQueryDevtools position="bottom-right" />
     </QueryClientProvider>
   </React.StrictMode>,
