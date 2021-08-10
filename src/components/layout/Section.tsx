@@ -9,7 +9,7 @@ type SectionProps = {
   title: string
   url: RoutePath
   items: MovieType[]
-  quantity: number
+  quantity?: number
   favorites: MovieType[]
   toggleFavorites: (movie: MovieType) => void
 }
@@ -19,7 +19,7 @@ const Section = ({ title, url, items, quantity, favorites, toggleFavorites }: Se
     <section className="my-8">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">{title}</h2>
-        {items.length ? (
+        {quantity && items.length ? (
           <Link to={url} className="text-sm border-b hover:text-primary">
             View All
           </Link>
@@ -52,7 +52,7 @@ const Section = ({ title, url, items, quantity, favorites, toggleFavorites }: Se
               </div>
               <div>
                 <Link to="" className="font-bold hover:text-primary">
-                  {movie.original_title}
+                  {movie.title}
                 </Link>
                 <p className="font-thin">{dayjs(movie.release_date).format("YYYY")}</p>
               </div>

@@ -1,4 +1,5 @@
 import App from "app/App"
+import ScrollToTop from "components/layout/ScrollToTop"
 import React from "react"
 import ReactDOM from "react-dom"
 import { QueryClient, QueryClientProvider } from "react-query"
@@ -22,6 +23,7 @@ ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <ScrollToTop />
         <App />
       </BrowserRouter>
       <ReactQueryDevtools position="bottom-right" />
