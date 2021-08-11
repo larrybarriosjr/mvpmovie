@@ -1,7 +1,7 @@
 import Footer from "components/layout/Footer"
 import Navbar from "components/layout/Navbar"
 import { LocalStorageKey, RoutePath } from "constants/enum"
-import { useGetPopular, useGetTopRated } from "hooks/api"
+import { useGetPopular, useGetTrending } from "hooks/api"
 import { useLocalStorage } from "hooks/web"
 import HomePage from "pages/HomePage"
 import ListPage from "pages/ListPage"
@@ -10,18 +10,18 @@ import { MovieType } from "types/tmdb"
 
 function App() {
   const { data: popular } = useGetPopular()
-  const { data: topRated } = useGetTopRated()
+  const { data: trending } = useGetTrending()
 
   const [favorites, setFavorites] = useLocalStorage<MovieType[]>(LocalStorageKey.FAVORITES, [])
 
   const handleToggleFavorites = (movie: MovieType) => {
-    favorites.find(fave => fave.id === movie.id)
-      ? setFavorites(favorites.filter(fave => fave.id !== movie.id))
+    favorites.find(fave => fave.ids.trakt === movie.ids.trakt)
+      ? setFavorites(favorites.filter(fave => fave.ids.trakt !== movie.ids.trakt))
       : setFavorites(faves => [...faves, movie])
   }
 
   if (!popular) return null
-  if (!topRated) return null
+  if (!trending) return null
 
   return (
     <div className="flex flex-col w-full min-h-screen text-white bg-black">
@@ -30,8 +30,8 @@ function App() {
         <Switch>
           <Route exact path={RoutePath.HOME}>
             <HomePage
-              popular={popular.data.results}
-              topRated={topRated.data.results}
+              popular={popular.data}
+              trending={trending.data.map(item => item.movie)}
               favorites={favorites}
               toggleFavorites={handleToggleFavorites}
             />
@@ -40,16 +40,16 @@ function App() {
             <ListPage
               title="Popular Movies"
               url={RoutePath.POPULAR}
-              items={popular.data.results}
+              items={popular.data}
               favorites={favorites}
               toggleFavorites={handleToggleFavorites}
             />
           </Route>
-          <Route exact path={RoutePath.TOP_RATED}>
+          <Route exact path={RoutePath.TRENDING}>
             <ListPage
-              title="Top Rated Movies"
-              url={RoutePath.TOP_RATED}
-              items={topRated.data.results}
+              title="Trending Movies"
+              url={RoutePath.TRENDING}
+              items={trending.data.map(item => item.movie)}
               favorites={favorites}
               toggleFavorites={handleToggleFavorites}
             />

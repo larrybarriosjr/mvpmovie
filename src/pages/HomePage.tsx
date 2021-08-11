@@ -5,12 +5,12 @@ import { MovieType } from "types/tmdb"
 
 type HomePageProps = {
   popular: MovieType[]
-  topRated: MovieType[]
+  trending: MovieType[]
   favorites: MovieType[]
   toggleFavorites: (movie: MovieType) => void
 }
 
-const HomePage = ({ popular, topRated, favorites, toggleFavorites }: HomePageProps) => {
+const HomePage = ({ popular, trending, favorites, toggleFavorites }: HomePageProps) => {
   return (
     <Fragment>
       <Section
@@ -22,9 +22,9 @@ const HomePage = ({ popular, topRated, favorites, toggleFavorites }: HomePagePro
         toggleFavorites={toggleFavorites}
       />
       <Section
-        title="Top Rated Movies"
-        url={RoutePath.TOP_RATED}
-        items={topRated}
+        title="Trending Movies"
+        url={RoutePath.TRENDING}
+        items={trending}
         quantity={8}
         favorites={favorites}
         toggleFavorites={toggleFavorites}

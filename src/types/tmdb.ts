@@ -1,4 +1,20 @@
 export type MovieType = {
+  title: string
+  year: number
+  ids: {
+    trakt: number
+    slug: string
+    imdb: string
+    tmdb: number
+  }
+}
+
+export type TrendingMovieType = {
+  watchers: number
+  movie: MovieType
+}
+
+export type TmdbResultType = {
   adult: boolean
   backdrop_path: string
   genre_ids: number[]
@@ -13,11 +29,4 @@ export type MovieType = {
   video: boolean
   vote_average: number
   vote_count: number
-}
-
-export type MovieResponseType = {
-  page: number
-  results: MovieType[]
-  total_results: number
-  total_pages: number
 }
