@@ -6,3 +6,5 @@ export const API_KEY_PROP = process.env.REACT_APP_API_KEY_PROP
 export const API_KEY_VALUE = process.env.REACT_APP_API_KEY_VALUE
 export const TMDB_BASE_URL = process.env.REACT_APP_TMDB_BASE_URL
 export const TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY
+export const PAGE_COUNT = process.env.REACT_APP_PAGE_COUNT
+export const ITEM_COUNT = process.env.REACT_APP_ITEM_COUNT

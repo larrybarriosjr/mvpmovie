@@ -1,3 +1,4 @@
+import Loading from "components/Loading"
 import Section from "components/Section"
 import { RoutePath } from "constants/enum"
 import { Fragment } from "react"
@@ -8,9 +9,12 @@ type HomePageProps = {
   trending: MovieType[]
   favorites: MovieType[]
   toggleFavorites: (movie: MovieType) => void
+  loading?: boolean
 }
 
-const HomePage = ({ popular, trending, favorites, toggleFavorites }: HomePageProps) => {
+const HomePage = ({ popular, trending, favorites, toggleFavorites, loading }: HomePageProps) => {
+  if (loading) return <Loading />
+
   return (
     <Fragment>
       <Section

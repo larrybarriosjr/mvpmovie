@@ -1,0 +1,13 @@
+.rc-pagination > li:hover {
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.rc-pagination-item-active {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.rc-pagination-disabled {
+  display: none;
+}
