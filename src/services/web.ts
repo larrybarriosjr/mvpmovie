@@ -1,11 +1,11 @@
 import axios from "axios"
-import { API_KEY, BASE_URL } from "constants/env"
+import { API_KEY_PROP, API_KEY_VALUE, API_VERSION_PROP, API_VERSION_VALUE, BASE_URL } from "constants/env"
 
-const instance = axios.create({ baseURL: BASE_URL })
-
-instance.interceptors.request.use(config => {
-  config.params = { api_key: API_KEY }
-  return config
+export const Axios = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    [API_VERSION_PROP]: API_VERSION_VALUE,
+    [API_KEY_PROP]: API_KEY_VALUE
+  }
 })
-
-export const Axios = instance

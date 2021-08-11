@@ -6,7 +6,7 @@ import { useLocalStorage } from "hooks/web"
 import HomePage from "pages/HomePage"
 import ListPage from "pages/ListPage"
 import { Route, Switch } from "react-router-dom"
-import { MovieType } from "types/tmdb"
+import { MovieType } from "types/movies"
 
 function App() {
   const { data: popular } = useGetPopular()

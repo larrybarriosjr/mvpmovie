@@ -1,7 +1,7 @@
 import Section from "components/Section"
 import { RoutePath } from "constants/enum"
 import { Fragment } from "react"
-import { MovieType } from "types/tmdb"
+import { MovieType } from "types/movies"
 
 type HomePageProps = {
   popular: MovieType[]
