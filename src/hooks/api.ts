@@ -7,12 +7,12 @@ import { Axios } from "services/web"
 import { MovieImageUrlType, MovieType, TrendingMovieType } from "types/movies"
 
 export const useGetPopular = () => {
-  const getPopular = () => Axios.get(ApiRoutePath.POPULAR)
+  const getPopular = () => Axios.get(ApiRoutePath.POPULAR, { params: { limit: 20 } })
   return useQuery<AxiosResponse<MovieType[]>>(ApiRouteKey.POPULAR, getPopular)
 }
 
 export const useGetTrending = () => {
-  const getTrending = () => Axios.get(ApiRoutePath.TRENDING)
+  const getTrending = () => Axios.get(ApiRoutePath.TRENDING, { params: { limit: 20 } })
   return useQuery<AxiosResponse<TrendingMovieType[]>>(ApiRouteKey.TRENDING, getTrending)
 }
 
