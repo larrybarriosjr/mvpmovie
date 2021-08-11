@@ -1,4 +1,4 @@
-import Section from "components/layout/Section"
+import Section from "components/Section"
 import { RoutePath } from "constants/enum"
 import { Fragment } from "react"
 import { MovieType } from "types/tmdb"
