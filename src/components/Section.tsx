@@ -1,6 +1,10 @@
+import { MAX_ITEMS, PAGE_SIZE } from "constants/default"
 import { RoutePath } from "constants/enum"
 import { IMAGE_URL } from "constants/env"
 import { useGetImageUrls } from "hooks/api"
+import Pagination from "rc-pagination"
+import EnUsLocale from "rc-pagination/lib/locale/en_US"
+import { RiArrowLeftSFill, RiArrowRightSFill, RiMoreFill } from "react-icons/ri"
 import { TiStarFullOutline, TiStarOutline } from "react-icons/ti"
 import { Link } from "react-router-dom"
 import { MovieType } from "types/movies"
@@ -12,16 +16,27 @@ type SectionProps = {
   quantity?: number
   favorites: MovieType[]
   toggleFavorites: (movie: MovieType) => void
+  currentPage?: number
+  totalItems?: number
+  onPageChange?: (page: number, pageSize: number) => void
 }
 
-const Section = ({ title, url, items, quantity, favorites, toggleFavorites }: SectionProps) => {
+const Section = ({
+  title,
+  url,
+  items,
+  quantity,
+  favorites,
+  toggleFavorites,
+  currentPage,
+  totalItems,
+  onPageChange
+}: SectionProps) => {
   const imageUrls = useGetImageUrls(items)
 
   const movieUrl = (movie: MovieType) => {
-    return imageUrls.find(item => item.id === movie.ids.tmdb)
+    return imageUrls.filter(item => item.id === movie.ids.tmdb)[0]
   }
-
-  if (!imageUrls) return null
 
   return (
     <section className="my-8">
@@ -35,16 +50,17 @@ const Section = ({ title, url, items, quantity, favorites, toggleFavorites }: Se
       </div>
       {items.length ? (
         <ul className="grid grid-cols-2 my-4 text-center md:grid-cols-4 justify-items-center gap-y-6">
-          {items.slice(0, quantity).map((movie: MovieType) =>
-            movieUrl(movie) ? (
+          {items
+            .slice(0, quantity)
+            .filter((movie: MovieType) => movie.ids.tmdb === movieUrl(movie)?.id)
+            .map((movie: MovieType) => (
               <li key={movie.ids.trakt} className="flex flex-col gap-2">
-                <div className="relative p-1 cursor-pointer hover:ring-4 hover:ring-primary">
+                <div className="relative p-1 overflow-hidden cursor-pointer hover:ring-4 hover:ring-primary">
                   <Link to={`${RoutePath.DETAILS}/${movie.ids.trakt}`}>
                     <img
-                      src={IMAGE_URL + movieUrl(movie)?.url}
+                      src={IMAGE_URL + movieUrl(movie).url}
                       alt={movie.title}
-                      width="240"
-                      className="border border-white border-solid"
+                      className="object-cover border border-white border-solid w-60 h-96"
                     />
                   </Link>
                   <button
@@ -66,14 +82,28 @@ const Section = ({ title, url, items, quantity, favorites, toggleFavorites }: Se
                   <p className="font-thin">{movie.year}</p>
                 </div>
               </li>
-            ) : null
-          )}
+            ))}
         </ul>
       ) : url === RoutePath.FAVORITES ? (
         <div className="mt-8 mb-16 text-lg text-center">
           <p>You haven&apos;t added your favorite movies yet.</p>
           <p>Search for a movie and click on one of the stars (&#9734;) to add one.</p>
         </div>
+      ) : null}
+      {currentPage && totalItems && onPageChange ? (
+        <Pagination
+          className="flex items-center justify-center my-4 text-lg gap-x-4"
+          current={currentPage}
+          pageSize={PAGE_SIZE}
+          total={Math.min(MAX_ITEMS, totalItems)}
+          prevIcon={<RiArrowLeftSFill className="cursor-pointer" size="24" />}
+          nextIcon={<RiArrowRightSFill className="cursor-pointer" size="24" />}
+          jumpNextIcon={<RiMoreFill />}
+          jumpPrevIcon={<RiMoreFill />}
+          locale={EnUsLocale}
+          onChange={onPageChange}
+          hideOnSinglePage
+        />
       ) : null}
     </section>
   )

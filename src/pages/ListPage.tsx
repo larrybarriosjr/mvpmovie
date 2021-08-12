@@ -1,8 +1,6 @@
-import Pagination from "components/Pagination"
 import Section from "components/Section"
 import { PAGE_SIZE } from "constants/default"
 import { RoutePath } from "constants/enum"
-import { Fragment } from "react"
 import { useLocation } from "react-router-dom"
 import { MovieType } from "types/movies"
 
@@ -28,20 +26,19 @@ const ListPage = ({
   onPageChange
 }: ListPageProps) => {
   const location = useLocation()
-
-  const favoritesItems = items.slice(currentPage * PAGE_SIZE - PAGE_SIZE, currentPage * PAGE_SIZE)
+  const fullItems = items.slice(currentPage * PAGE_SIZE - PAGE_SIZE, currentPage * PAGE_SIZE)
 
   return (
-    <Fragment>
-      <Section
-        title={title}
-        url={url}
-        items={location.pathname === RoutePath.FAVORITES ? favoritesItems : items}
-        favorites={favorites}
-        toggleFavorites={toggleFavorites}
-      />
-      <Pagination currentPage={currentPage} totalItems={totalItems} onPageChange={onPageChange} />
-    </Fragment>
+    <Section
+      title={title}
+      url={url}
+      items={location.pathname === RoutePath.FAVORITES ? fullItems : items}
+      favorites={favorites}
+      toggleFavorites={toggleFavorites}
+      currentPage={currentPage}
+      totalItems={totalItems}
+      onPageChange={onPageChange}
+    />
   )
 }
 
