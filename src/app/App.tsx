@@ -18,6 +18,7 @@ function App() {
   const [popularPage, setPopularPage] = useLocalStorage<number>(LocalStorageKey.POPULAR_PAGE, 0)
   const [trendingPage, setTrendingPage] = useLocalStorage<number>(LocalStorageKey.TRENDING_PAGE, 0)
   const [favoritesPage, setFavoritesPage] = useLocalStorage<number>(LocalStorageKey.FAVORITES_PAGE, 0)
+  const [faveLastPage, setFaveLastPage] = useLocalStorage<number>(LocalStorageKey.FAVORITES_LAST_PAGE, 0)
 
   const [favorites, setFavorites] = useLocalStorage<MovieType[]>(LocalStorageKey.FAVORITES, [])
 
@@ -26,13 +27,14 @@ function App() {
     refetch: fetchPopular,
     isFetching: popularIsFetching,
     isLoading: popularIsLoading
-  } = useGetPopular({ page: popularPage })
+  } = useGetPopular(popularPage)
+
   const {
     data: trending,
     refetch: fetchTrending,
     isFetching: trendingIsFetching,
     isLoading: trendingIsLoading
-  } = useGetTrending({ page: trendingPage })
+  } = useGetTrending(trendingPage)
 
   const handleToggleFavorites = (movie: MovieType) => {
     favorites.find(fave => fave.ids.trakt === movie.ids.trakt)
@@ -40,43 +42,37 @@ function App() {
       : setFavorites(faves => [...faves, movie])
   }
 
-  const handlePopularPageChange = (page: number) => {
-    setPopularPage(page)
-    setLoading(true)
-  }
-
-  const handleTrendingPageChange = (page: number) => {
-    setTrendingPage(page)
-    setLoading(true)
-  }
-
-  const handleFavoritesPageChange = (page: number) => {
-    setFavoritesPage(page)
+  const handlePageChange = (setter: (value: number) => void) => (page: number) => {
+    setter(page)
     setLoading(true)
   }
 
   useEffect(() => {
-    if (location.pathname !== RoutePath.POPULAR) setPopularPage(1)
-    if (location.pathname !== RoutePath.TRENDING) setTrendingPage(1)
-    if (location.pathname !== RoutePath.FAVORITES) setFavoritesPage(1)
-  }, [location, setPopularPage, setTrendingPage, setFavoritesPage])
+    if (location.pathname !== RoutePath.POPULAR || !popularPage) setPopularPage(1)
+    if (location.pathname !== RoutePath.TRENDING || !trendingPage) setTrendingPage(1)
+    if (location.pathname !== RoutePath.FAVORITES || !favoritesPage) setFavoritesPage(1)
+  }, [
+    location,
+    popularPage,
+    trendingPage,
+    favoritesPage,
+    setPopularPage,
+    setTrendingPage,
+    setFavoritesPage,
+  ])
 
   useEffect(() => {
-    if (!popularPage) setPopularPage(1)
-  }, [popularPage, setPopularPage])
+    if (!favorites) setFavorites([])
+    if (!faveLastPage) setFaveLastPage(0)
+  }, [favorites, faveLastPage, setFavorites, setFaveLastPage])
 
   useEffect(() => {
-    if (!trendingPage) setTrendingPage(1)
-  }, [trendingPage, setTrendingPage])
-
-  useEffect(() => {
-    if (!favoritesPage) setFavoritesPage(1)
-  }, [favoritesPage, setFavoritesPage])
-
-  useEffect(() => {
-    if (favorites.length % PAGE_SIZE !== 0) return
-    setFavoritesPage(Math.ceil(favorites.length / PAGE_SIZE))
-  }, [favorites.length, setFavoritesPage])
+    if (!favorites) return
+    if (!faveLastPage) return
+    const faveTotalPages = Math.ceil(favorites.length / PAGE_SIZE) || 1
+    if (faveLastPage !== faveTotalPages) setFaveLastPage(faveTotalPages)
+    if (favoritesPage > faveLastPage) setFavoritesPage(faveTotalPages)
+  }, [favorites, faveLastPage, favoritesPage, setFaveLastPage, setFavoritesPage])
 
   useEffect(() => {
     if (location.pathname === RoutePath.POPULAR) fetchPopular()
@@ -120,7 +116,7 @@ function App() {
                 toggleFavorites={handleToggleFavorites}
                 currentPage={popularPage}
                 totalItems={popular.headers[ITEM_COUNT]}
-                onPageChange={handlePopularPageChange}
+                onPageChange={handlePageChange(setPopularPage)}
               />
             ) : (
               <Loading />
@@ -136,7 +132,7 @@ function App() {
                 toggleFavorites={handleToggleFavorites}
                 currentPage={trendingPage}
                 totalItems={trending.headers[ITEM_COUNT]}
-                onPageChange={handleTrendingPageChange}
+                onPageChange={handlePageChange(setTrendingPage)}
               />
             ) : (
               <Loading />
@@ -151,7 +147,7 @@ function App() {
               toggleFavorites={handleToggleFavorites}
               currentPage={favoritesPage}
               totalItems={favorites.length}
-              onPageChange={handleFavoritesPageChange}
+              onPageChange={handlePageChange(setFavoritesPage)}
             />
           </Route>
         </Switch>
