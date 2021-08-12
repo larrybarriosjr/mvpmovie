@@ -24,5 +24,8 @@ export enum ApiRoutePath {
 }
 
 export enum LocalStorageKey {
-  FAVORITES = "favorites"
+  FAVORITES = "favorites",
+  POPULAR_PAGE = "popular_page",
+  TRENDING_PAGE = "trending_page",
+  FAVORITES_PAGE = "favorites_page"
 }

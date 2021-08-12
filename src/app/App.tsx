@@ -1,6 +1,7 @@
 import Footer from "components/Footer"
 import Loading from "components/Loading"
 import Navbar from "components/Navbar"
+import { PAGE_SIZE } from "constants/default"
 import { LocalStorageKey, RoutePath } from "constants/enum"
 import { ITEM_COUNT } from "constants/env"
 import { useGetPopular, useGetTrending } from "hooks/api"
@@ -14,8 +15,11 @@ import { MovieType } from "types/movies"
 function App() {
   const location = useLocation()
   const [loading, setLoading] = useState(false)
-  const [popularPage, setPopularPage] = useLocalStorage("popularPage", 0)
-  const [trendingPage, setTrendingPage] = useLocalStorage("trendingPage", 0)
+  const [popularPage, setPopularPage] = useLocalStorage<number>(LocalStorageKey.POPULAR_PAGE, 0)
+  const [trendingPage, setTrendingPage] = useLocalStorage<number>(LocalStorageKey.TRENDING_PAGE, 0)
+  const [favoritesPage, setFavoritesPage] = useLocalStorage<number>(LocalStorageKey.FAVORITES_PAGE, 0)
+
+  const [favorites, setFavorites] = useLocalStorage<MovieType[]>(LocalStorageKey.FAVORITES, [])
 
   const {
     data: popular,
@@ -29,8 +33,6 @@ function App() {
     isFetching: trendingIsFetching,
     isLoading: trendingIsLoading
   } = useGetTrending({ page: trendingPage })
-
-  const [favorites, setFavorites] = useLocalStorage<MovieType[]>(LocalStorageKey.FAVORITES, [])
 
   const handleToggleFavorites = (movie: MovieType) => {
     favorites.find(fave => fave.ids.trakt === movie.ids.trakt)
@@ -48,10 +50,16 @@ function App() {
     setLoading(true)
   }
 
+  const handleFavoritesPageChange = (page: number) => {
+    setFavoritesPage(page)
+    setLoading(true)
+  }
+
   useEffect(() => {
     if (location.pathname !== RoutePath.POPULAR) setPopularPage(1)
     if (location.pathname !== RoutePath.TRENDING) setTrendingPage(1)
-  }, [location, setPopularPage, setTrendingPage])
+    if (location.pathname !== RoutePath.FAVORITES) setFavoritesPage(1)
+  }, [location, setPopularPage, setTrendingPage, setFavoritesPage])
 
   useEffect(() => {
     if (!popularPage) setPopularPage(1)
@@ -62,12 +70,18 @@ function App() {
   }, [trendingPage, setTrendingPage])
 
   useEffect(() => {
-    fetchPopular()
-  }, [popularPage, fetchPopular])
+    if (!favoritesPage) setFavoritesPage(1)
+  }, [favoritesPage, setFavoritesPage])
 
   useEffect(() => {
-    fetchTrending()
-  }, [trendingPage, fetchTrending])
+    if (favorites.length % PAGE_SIZE !== 0) return
+    setFavoritesPage(Math.ceil(favorites.length / PAGE_SIZE))
+  }, [favorites.length, setFavoritesPage])
+
+  useEffect(() => {
+    if (location.pathname === RoutePath.POPULAR) fetchPopular()
+    if (location.pathname === RoutePath.TRENDING) fetchTrending()
+  }, [location, popularPage, fetchPopular, trendingPage, fetchTrending])
 
   useEffect(() => {
     if (popularIsFetching || popularIsLoading) return
@@ -128,15 +142,18 @@ function App() {
               <Loading />
             )}
           </Route>
-          {/* <Route exact path={RoutePath.FAVORITES}>
+          <Route exact path={RoutePath.FAVORITES}>
             <ListPage
               title="Your Favorite Movies"
               url={RoutePath.FAVORITES}
               items={favorites}
               favorites={favorites}
               toggleFavorites={handleToggleFavorites}
+              currentPage={favoritesPage}
+              totalItems={favorites.length}
+              onPageChange={handleFavoritesPageChange}
             />
-          </Route> */}
+          </Route>
         </Switch>
       </main>
       <Footer />
