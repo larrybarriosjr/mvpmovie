@@ -7,13 +7,14 @@ import { useQuery } from "react-query"
 import { Axios } from "services/web"
 import { MovieImageUrlType, MovieType, TrendingMovieType } from "types/movies"
 
-export const useGetPopular = ({ page }: { page: number }) => {
-  const getPopular = () => Axios.get(ApiRoutePath.POPULAR, { params: { limit: PAGE_SIZE, page } })
+export const useGetPopular = (page: number, limit?: number) => {
+  const getPopular = () => Axios.get(ApiRoutePath.POPULAR, { params: { limit: limit || PAGE_SIZE, page } })
   return useQuery<AxiosResponse<MovieType[]>>(ApiRouteKey.POPULAR, getPopular)
 }
 
-export const useGetTrending = ({ page }: { page: number }) => {
-  const getTrending = () => Axios.get(ApiRoutePath.TRENDING, { params: { limit: PAGE_SIZE, page } })
+export const useGetTrending = (page: number, limit?: number) => {
+  const getTrending = () =>
+    Axios.get(ApiRoutePath.TRENDING, { params: { limit: limit || PAGE_SIZE, page } })
   return useQuery<AxiosResponse<TrendingMovieType[]>>(ApiRouteKey.TRENDING, getTrending)
 }
 

@@ -12,10 +12,11 @@ import reportWebVitals from "./reportWebVitals"
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      enabled: false,
       staleTime: Infinity,
       refetchOnMount: false,
-      refetchOnReconnect: "always",
-      refetchOnWindowFocus: "always"
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: "always"
     }
   }
 })

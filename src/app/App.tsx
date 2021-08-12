@@ -30,11 +30,25 @@ function App() {
   } = useGetPopular(popularPage)
 
   const {
+    data: homePopular,
+    refetch: fetchHomePopular,
+    isFetching: homePopularIsFetching,
+    isLoading: homePopularIsLoading
+  } = useGetPopular(1, HOME_POPULAR_SIZE)
+
+  const {
     data: trending,
     refetch: fetchTrending,
     isFetching: trendingIsFetching,
     isLoading: trendingIsLoading
   } = useGetTrending(trendingPage)
+
+  const {
+    data: homeTrending,
+    refetch: fetchHomeTrending,
+    isFetching: homeTrendingIsFetching,
+    isLoading: homeTrendingIsLoading
+  } = useGetTrending(1, HOME_TRENDING_SIZE)
 
   const handleToggleFavorites = (movie: MovieType) => {
     favorites.find(fave => fave.ids.trakt === movie.ids.trakt)
@@ -77,7 +91,20 @@ function App() {
   useEffect(() => {
     if (location.pathname === RoutePath.POPULAR) fetchPopular()
     if (location.pathname === RoutePath.TRENDING) fetchTrending()
-  }, [location, popularPage, fetchPopular, trendingPage, fetchTrending])
+    if (location.pathname === RoutePath.HOME) {
+      fetchHomePopular()
+      fetchHomeTrending()
+    }
+  }, [
+    location,
+    popularPage,
+    fetchPopular,
+    trendingPage,
+    fetchTrending,
+    fetchHomePopular,
+    fetchHomeTrending
+  ])
+
 
   useEffect(() => {
     if (popularIsFetching || popularIsLoading) return
@@ -89,8 +116,16 @@ function App() {
     setLoading(false)
   }, [trendingIsFetching, trendingIsLoading])
 
-  if (!popular) return null
-  if (!trending) return null
+  useEffect(() => {
+    if (homePopularIsFetching || homePopularIsLoading) return
+    setLoading(false)
+  }, [homePopularIsFetching, homePopularIsLoading])
+
+  useEffect(() => {
+    if (homeTrendingIsFetching || homeTrendingIsLoading) return
+    setLoading(false)
+  }, [homeTrendingIsFetching, homeTrendingIsLoading])
+
 
   return (
     <div className="flex flex-col w-full min-h-screen text-white bg-black">
@@ -98,16 +133,25 @@ function App() {
       <main className="flex-grow w-full max-w-5xl px-2 mx-auto mt-28">
         <Switch>
           <Route exact path={RoutePath.HOME}>
+            {!loading && homePopular && homeTrending ? (
             <HomePage
-              popular={popular.data}
-              trending={trending.data.map(item => item.movie)}
+                popular={homePopular.data}
+                trending={homeTrending.data.map(item => item.movie)}
               favorites={favorites}
               toggleFavorites={handleToggleFavorites}
-              loading={popularIsLoading || popularIsFetching || trendingIsLoading || trendingIsFetching}
+                loading={
+                  homePopularIsLoading ||
+                  homePopularIsFetching ||
+                  homeTrendingIsLoading ||
+                  homeTrendingIsFetching
+                }
             />
+            ) : (
+              <Loading />
+            )}
           </Route>
           <Route exact path={RoutePath.POPULAR}>
-            {!loading ? (
+            {!loading && popular ? (
               <ListPage
                 title="Popular Movies"
                 url={RoutePath.POPULAR}
@@ -123,7 +167,7 @@ function App() {
             )}
           </Route>
           <Route exact path={RoutePath.TRENDING}>
-            {!loading ? (
+            {!loading && trending ? (
               <ListPage
                 title="Trending Movies"
                 url={RoutePath.TRENDING}
