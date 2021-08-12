@@ -26,14 +26,21 @@ export const useGetTrending = (page: number, limit?: number) => {
 
 export const useGetImageUrls = (items: MovieType[]) => {
   const [imageUrls, setImageUrls] = useState<MovieImageUrlType[]>([])
+  const getTmdbMovie = (item: MovieType) =>
+    axios.get<{ id: number; poster_path: string }>(`${TMDB_BASE_URL}${item.ids.tmdb}${TMDB_API_KEY}`)
 
   useEffect(() => {
     const fetchImageUrls = async () => {
-      const results = await Promise.all(
-        items.map(item => axios.get(TMDB_BASE_URL + item.ids.tmdb + TMDB_API_KEY))
+      const results = await Promise.allSettled(items.map(getTmdbMovie))
+      setImageUrls(
+        results
+          .map(data =>
+            data.status === "fulfilled"
+              ? { id: data.value.data.id, url: data.value.data.poster_path }
+              : { id: 0, url: "" }
+          )
+          .filter(data => data.id && data.url)
       )
-
-      setImageUrls(results.map(({ data }) => ({ id: data?.id, url: data?.poster_path })))
     }
 
     fetchImageUrls()
