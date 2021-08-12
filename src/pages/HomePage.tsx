@@ -1,42 +1,37 @@
-import Section from "components/layout/Section"
-import { LocalStorageKey, RoutePath } from "constants/enum"
-import { useGetPopular, useGetTopRated } from "hooks/api"
-import { useLocalStorage } from "hooks/web"
+import Loading from "components/Loading"
+import Section from "components/Section"
+import { RoutePath } from "constants/enum"
 import { Fragment } from "react"
-import { MovieType } from "types/tmdb"
+import { MovieType } from "types/movies"
 
-const HomePage = () => {
-  const { data: popular } = useGetPopular()
-  const { data: topRated } = useGetTopRated()
+type HomePageProps = {
+  popular: MovieType[]
+  trending: MovieType[]
+  favorites: MovieType[]
+  toggleFavorites: (movie: MovieType) => void
+  loading?: boolean
+}
 
-  const [favorites, setFavorites] = useLocalStorage<MovieType[]>(LocalStorageKey.FAVORITES, [])
-
-  const handleToggleFavorites = (movie: MovieType) => {
-    favorites.find(fave => fave.id === movie.id)
-      ? setFavorites(favorites.filter(fave => fave.id !== movie.id))
-      : setFavorites(faves => [...faves, movie])
-  }
-
-  if (!popular) return null
-  if (!topRated) return null
+const HomePage = ({ popular, trending, favorites, toggleFavorites, loading }: HomePageProps) => {
+  if (loading) return <Loading />
 
   return (
     <Fragment>
       <Section
         title="Popular Movies"
         url={RoutePath.POPULAR}
-        items={popular.data.results}
+        items={popular}
         quantity={4}
         favorites={favorites}
-        toggleFavorites={handleToggleFavorites}
+        toggleFavorites={toggleFavorites}
       />
       <Section
-        title="Top Rated Movies"
-        url={RoutePath.TOP_RATED}
-        items={topRated.data.results}
+        title="Trending Movies"
+        url={RoutePath.TRENDING}
+        items={trending}
         quantity={8}
         favorites={favorites}
-        toggleFavorites={handleToggleFavorites}
+        toggleFavorites={toggleFavorites}
       />
       <Section
         title="Your Favorite Movies"
@@ -44,7 +39,7 @@ const HomePage = () => {
         items={favorites}
         quantity={4}
         favorites={favorites}
-        toggleFavorites={handleToggleFavorites}
+        toggleFavorites={toggleFavorites}
       />
     </Fragment>
   )
