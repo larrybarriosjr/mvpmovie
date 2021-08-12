@@ -1,9 +1,14 @@
+import { useLocalStorageValue } from "@react-hookz/web"
 import clsx from "clsx"
-import { ChangeEvent, useState } from "react"
+import { LocalStorageKey, RoutePath } from "constants/enum"
+import { ChangeEvent, KeyboardEvent, useState } from "react"
 import { RiSearchLine } from "react-icons/ri"
+import { useHistory } from "react-router-dom"
 
 const Searchbar = () => {
+  const history = useHistory()
   const [value, setValue] = useState<string>("")
+  const [, setQuery] = useLocalStorageValue<string>(LocalStorageKey.SEARCH_QUERY, "")
 
   const inputClasses = clsx([
     "pl-10 py-2 bg-black border-2 rounded-full outline-none border-gray focus:border-primary",
@@ -14,15 +19,24 @@ const Searchbar = () => {
     setValue(e.target.value)
   }
 
+  const handleMovieSearch = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (value && e.key === "Enter") {
+      setQuery(value)
+      setValue("")
+      history.push(RoutePath.SEARCH)
+    }
+  }
+
   return (
     <label className="relative mx-2 ml-auto mr-4 lg:mr-16">
-      <RiSearchLine className="absolute h-full my-auto left-3" size="20" />
+      <RiSearchLine className="absolute h-full my-auto cursor-default left-3" size="20" />
       <input
         name="search"
         placeholder="Search movie..."
         className={inputClasses}
         value={value}
         onChange={handleValueChange}
+        onKeyDown={handleMovieSearch}
       />
     </label>
   )

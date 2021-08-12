@@ -7,6 +7,19 @@ export type MovieType = {
     imdb: string
     tmdb: number
   }
+  tagline: string
+  overview: string
+  released: string
+  runtime: number
+  country: string
+  trailer: string
+  homepage: string
+  status: string
+  rating: number
+  votes: number
+  comment_count: number
+  updated_at: string
+  language: string
 }
 
 export type TrendingMovieType = {
@@ -17,4 +30,14 @@ export type TrendingMovieType = {
 export type MovieImageUrlType = {
   id: number
   url: string
+}
+
+export type MovieSearchQueryType = {
+  query: string
+}
+
+export type SearchMovieType = {
+  type: string
+  score: number
+  movie: MovieType
 }

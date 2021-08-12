@@ -1,13 +1,14 @@
+import { useLocalStorageValue as useLocalStorage } from "@react-hookz/web"
 import Footer from "components/Footer"
 import Loading from "components/Loading"
 import Navbar from "components/Navbar"
-import { PAGE_SIZE } from "constants/default"
+import { HOME_POPULAR_SIZE, HOME_TRENDING_SIZE, PAGE_SIZE } from "constants/default"
 import { LocalStorageKey, RoutePath } from "constants/enum"
 import { ITEM_COUNT } from "constants/env"
-import { useGetPopular, useGetTrending } from "hooks/api"
-import { useLocalStorage } from "hooks/web"
+import { useGetPopular, useGetTrending, useSearchMovie } from "hooks/api"
 import HomePage from "pages/HomePage"
 import ListPage from "pages/ListPage"
+import SearchPage from "pages/SearchPage"
 import { useEffect, useState } from "react"
 import { Route, Switch, useLocation } from "react-router-dom"
 import { MovieType } from "types/movies"
@@ -18,7 +19,9 @@ function App() {
   const [popularPage, setPopularPage] = useLocalStorage<number>(LocalStorageKey.POPULAR_PAGE, 0)
   const [trendingPage, setTrendingPage] = useLocalStorage<number>(LocalStorageKey.TRENDING_PAGE, 0)
   const [favoritesPage, setFavoritesPage] = useLocalStorage<number>(LocalStorageKey.FAVORITES_PAGE, 0)
+  const [searchPage, setSearchPage] = useLocalStorage<number>(LocalStorageKey.SEARCH_PAGE, 0)
   const [faveLastPage, setFaveLastPage] = useLocalStorage<number>(LocalStorageKey.FAVORITES_LAST_PAGE, 0)
+  const [searchQuery] = useLocalStorage<string>(LocalStorageKey.SEARCH_QUERY, "")
 
   const [favorites, setFavorites] = useLocalStorage<MovieType[]>(LocalStorageKey.FAVORITES, [])
 
@@ -50,10 +53,17 @@ function App() {
     isLoading: homeTrendingIsLoading
   } = useGetTrending(1, HOME_TRENDING_SIZE)
 
+  const {
+    data: search,
+    refetch: fetchSearch,
+    isFetching: searchIsFetching,
+    isLoading: searchIsLoading
+  } = useSearchMovie({ query: searchQuery })
+
   const handleToggleFavorites = (movie: MovieType) => {
     favorites.find(fave => fave.ids.trakt === movie.ids.trakt)
       ? setFavorites(favorites.filter(fave => fave.ids.trakt !== movie.ids.trakt))
-      : setFavorites(faves => [...faves, movie])
+      : setFavorites([...favorites, movie])
   }
 
   const handlePageChange = (setter: (value: number) => void) => (page: number) => {
@@ -65,14 +75,17 @@ function App() {
     if (location.pathname !== RoutePath.POPULAR || !popularPage) setPopularPage(1)
     if (location.pathname !== RoutePath.TRENDING || !trendingPage) setTrendingPage(1)
     if (location.pathname !== RoutePath.FAVORITES || !favoritesPage) setFavoritesPage(1)
+    if (location.pathname !== RoutePath.SEARCH || !searchPage) setSearchPage(1)
   }, [
     location,
     popularPage,
     trendingPage,
     favoritesPage,
+    searchPage,
     setPopularPage,
     setTrendingPage,
     setFavoritesPage,
+    setSearchPage
   ])
 
   useEffect(() => {
@@ -105,6 +118,13 @@ function App() {
     fetchHomeTrending
   ])
 
+  useEffect(() => {
+    if (!searchQuery) return
+    if (location.pathname === RoutePath.SEARCH) {
+      setLoading(true)
+      fetchSearch()
+    }
+  }, [searchQuery, location, fetchSearch])
 
   useEffect(() => {
     if (popularIsFetching || popularIsLoading) return
@@ -126,7 +146,6 @@ function App() {
     setLoading(false)
   }, [homeTrendingIsFetching, homeTrendingIsLoading])
 
-
   return (
     <div className="flex flex-col w-full min-h-screen text-white bg-black">
       <Navbar />
@@ -134,18 +153,18 @@ function App() {
         <Switch>
           <Route exact path={RoutePath.HOME}>
             {!loading && homePopular && homeTrending ? (
-            <HomePage
+              <HomePage
                 popular={homePopular.data}
                 trending={homeTrending.data.map(item => item.movie)}
-              favorites={favorites}
-              toggleFavorites={handleToggleFavorites}
+                favorites={favorites}
+                toggleFavorites={handleToggleFavorites}
                 loading={
                   homePopularIsLoading ||
                   homePopularIsFetching ||
                   homeTrendingIsLoading ||
                   homeTrendingIsFetching
                 }
-            />
+              />
             ) : (
               <Loading />
             )}
@@ -193,6 +212,22 @@ function App() {
               totalItems={favorites.length}
               onPageChange={handlePageChange(setFavoritesPage)}
             />
+          </Route>
+          <Route exact path={RoutePath.SEARCH}>
+            {!searchIsFetching && !searchIsLoading && search ? (
+              <SearchPage
+                title="Search Movies"
+                url={RoutePath.SEARCH}
+                items={search.data.map(item => item.movie)}
+                favorites={favorites}
+                toggleFavorites={handleToggleFavorites}
+                currentPage={searchPage}
+                totalItems={search.data.length}
+                onPageChange={handlePageChange(setSearchPage)}
+              />
+            ) : (
+              <Loading />
+            )}
           </Route>
         </Switch>
       </main>

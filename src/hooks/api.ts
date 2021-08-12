@@ -1,11 +1,17 @@
 import axios, { AxiosResponse } from "axios"
-import { PAGE_SIZE } from "constants/default"
+import { MAX_ITEMS, PAGE_SIZE } from "constants/default"
 import { ApiRouteKey, ApiRoutePath } from "constants/enum"
 import { TMDB_API_KEY, TMDB_BASE_URL } from "constants/env"
 import { useEffect, useState } from "react"
 import { useQuery } from "react-query"
 import { Axios } from "services/web"
-import { MovieImageUrlType, MovieType, TrendingMovieType } from "types/movies"
+import {
+  MovieImageUrlType,
+  MovieSearchQueryType,
+  MovieType,
+  SearchMovieType,
+  TrendingMovieType
+} from "types/movies"
 
 export const useGetPopular = (page: number, limit?: number) => {
   const getPopular = () => Axios.get(ApiRoutePath.POPULAR, { params: { limit: limit || PAGE_SIZE, page } })
@@ -34,4 +40,10 @@ export const useGetImageUrls = (items: MovieType[]) => {
   }, [items])
 
   return imageUrls
+}
+
+export const useSearchMovie = ({ query }: MovieSearchQueryType) => {
+  const searchMovie = () =>
+    Axios.get(ApiRoutePath.SEARCH, { params: { query, fields: "title", limit: MAX_ITEMS } })
+  return useQuery<AxiosResponse<SearchMovieType[]>>(ApiRouteKey.SEARCH, searchMovie)
 }

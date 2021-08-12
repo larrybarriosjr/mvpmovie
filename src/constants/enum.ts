@@ -10,22 +10,28 @@ export enum RoutePath {
   POPULAR = "/popular",
   TRENDING = "/trending",
   FAVORITES = "/favorites",
-  DETAILS = "/movie"
+  DETAILS = "/movie",
+  SEARCH = "/search"
 }
 
 export enum ApiRouteKey {
   POPULAR = "popular",
-  TRENDING = "trending"
+  TRENDING = "trending",
+  SEARCH = "search"
 }
 
 export enum ApiRoutePath {
   POPULAR = "/movies/popular",
-  TRENDING = "/movies/trending"
+  TRENDING = "/movies/trending",
+  SEARCH = "/search/movie"
 }
 
 export enum LocalStorageKey {
   FAVORITES = "favorites",
   POPULAR_PAGE = "popular_page",
   TRENDING_PAGE = "trending_page",
-  FAVORITES_PAGE = "favorites_page"
+  FAVORITES_PAGE = "favorites_page",
+  FAVORITES_LAST_PAGE = "favorites_last_page",
+  SEARCH_PAGE = "search_page",
+  SEARCH_QUERY = "search_query"
 }
