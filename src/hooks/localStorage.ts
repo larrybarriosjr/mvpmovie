@@ -16,3 +16,4 @@ export const useSearchQuery = () => useLocalStorageValue<string>(LocalStorageKey
 export const useGenre = () => useLocalStorageValue<string>(LocalStorageKey.GENRE, "")
 export const useYear = () => useLocalStorageValue<string>(LocalStorageKey.YEAR, "")
 export const useMovieSort = () => useLocalStorageValue<MovieSort>(LocalStorageKey.SORT_BY, MovieSort.LATEST)
+export const useFetchingResults = () => useLocalStorageValue<boolean>(LocalStorageKey.FETCHING, false)
