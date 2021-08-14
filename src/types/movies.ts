@@ -41,3 +41,8 @@ export type SearchMovieType = {
   score: number
   movie: MovieType
 }
+
+export type GenreType = {
+  name: string
+  slug: string
+}

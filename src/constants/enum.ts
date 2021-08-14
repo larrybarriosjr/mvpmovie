@@ -17,13 +17,15 @@ export enum RoutePath {
 export enum ApiRouteKey {
   POPULAR = "popular",
   TRENDING = "trending",
-  SEARCH = "search"
+  SEARCH = "search",
+  GENRES = "genres"
 }
 
 export enum ApiRoutePath {
   POPULAR = "/movies/popular",
   TRENDING = "/movies/trending",
-  SEARCH = "/search/movie"
+  SEARCH = "/search/movie",
+  GENRES = "/genres/movies"
 }
 
 export enum LocalStorageKey {
@@ -33,5 +35,6 @@ export enum LocalStorageKey {
   FAVORITES_PAGE = "favorites_page",
   FAVORITES_LAST_PAGE = "favorites_last_page",
   SEARCH_PAGE = "search_page",
-  SEARCH_QUERY = "search_query"
+  SEARCH_QUERY = "search_query",
+  GENRE = "genre"
 }

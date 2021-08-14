@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { useQuery } from "react-query"
 import { Axios } from "services/web"
 import {
+  GenreType,
   MovieImageUrlType,
   MovieSearchQueryType,
   MovieType,
@@ -53,4 +54,9 @@ export const useSearchMovie = ({ query }: MovieSearchQueryType) => {
   const searchMovie = () =>
     Axios.get(ApiRoutePath.SEARCH, { params: { query, fields: "title", limit: MAX_ITEMS } })
   return useQuery<AxiosResponse<SearchMovieType[]>>(ApiRouteKey.SEARCH, searchMovie)
+}
+
+export const useGetGenres = () => {
+  const getGenres = () => Axios.get(ApiRoutePath.GENRES)
+  return useQuery<AxiosResponse<GenreType[]>>(ApiRouteKey.GENRES, getGenres)
 }
