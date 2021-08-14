@@ -40,3 +40,13 @@ export enum LocalStorageKey {
   GENRE = "genre",
   YEAR = "year"
 }
+
+export enum MovieSortLabel {
+  AZ = "Alphabetical",
+  YR = "By Year"
+}
+
+export enum MovieSort {
+  AZ = "alphabetical",
+  YR = "by_year"
+}

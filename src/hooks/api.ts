@@ -58,7 +58,8 @@ export const useSearchMovie = ({ query, genre, year }: MovieSearchQueryType) => 
         fields: "title",
         limit: MAX_ITEMS,
         genres: genre || undefined,
-        years: year || undefined
+        years: year || undefined,
+        extended: "full"
       }
     })
   return useQuery<AxiosResponse<SearchMovieType[]>>(ApiRouteKey.SEARCH, searchMovie)

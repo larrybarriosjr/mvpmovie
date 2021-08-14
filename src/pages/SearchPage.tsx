@@ -4,6 +4,7 @@ import Loading from "components/Loading"
 import Searchbar from "components/Searchbar"
 import SearchButton from "components/SearchButton"
 import Section from "components/Section"
+import SortButtonGroup from "components/SortButtonGroup"
 import YearPicker from "components/YearPicker"
 import { PAGE_SIZE } from "constants/default"
 import { LocalStorageKey, RoutePath } from "constants/enum"
@@ -57,13 +58,14 @@ const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
 
   return (
     <Fragment>
-      <section className="p-4">
+      <section className="flex flex-col p-4 gap-y-4">
         <form onSubmit={handleSubmitSearch} className="flex justify-between w-full gap-4">
           <Searchbar />
           <GenreDropdown />
           <YearPicker />
           <SearchButton />
         </form>
+        <SortButtonGroup />
       </section>
       <Section
         title="Search Movies"
