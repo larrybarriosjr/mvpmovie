@@ -1,36 +1,50 @@
+import { useLocalStorageValue } from "@react-hookz/web"
 import GenreDropdown from "components/GenreDropdown"
+import Loading from "components/Loading"
 import Searchbar from "components/Searchbar"
 import Section from "components/Section"
 import YearPicker from "components/YearPicker"
 import { PAGE_SIZE } from "constants/default"
-import { RoutePath } from "constants/enum"
-import { Fragment } from "react"
-import { useLocation } from "react-router-dom"
+import { LocalStorageKey, RoutePath } from "constants/enum"
+import { useSearchMovie } from "hooks/api"
+import { Fragment, useEffect } from "react"
 import { MovieType } from "types/movies"
 
 type SearchPageProps = {
-  title: string
-  url: RoutePath
-  items: MovieType[]
   favorites: MovieType[]
   toggleFavorites: (movie: MovieType) => void
-  currentPage: number
-  totalItems: number
-  onPageChange: (page: number) => void
 }
 
-const SearchPage = ({
-  title,
-  url,
-  items,
-  favorites,
-  toggleFavorites,
-  currentPage,
-  totalItems,
-  onPageChange
-}: SearchPageProps) => {
-  const location = useLocation()
-  const fullItems = items.slice(currentPage * PAGE_SIZE - PAGE_SIZE, currentPage * PAGE_SIZE)
+const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
+  const [currentPage, setCurrentPage] = useLocalStorageValue<number>(LocalStorageKey.SEARCH_PAGE, 0)
+  const [searchQuery] = useLocalStorageValue<string>(LocalStorageKey.SEARCH_QUERY, "")
+
+  const {
+    data: search,
+    refetch: fetchSearch,
+    isFetching: searchIsFetching,
+    isLoading: searchIsLoading
+  } = useSearchMovie({ query: searchQuery })
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  useEffect(() => {
+    if (!currentPage) setCurrentPage(1)
+  }, [currentPage, setCurrentPage])
+
+  useEffect(() => {
+    if (!searchQuery) return
+    fetchSearch()
+  }, [searchQuery, fetchSearch])
+
+  if (!search) return null
+  if (searchIsLoading || searchIsFetching) return <Loading />
+
+  const fullItems = search.data
+    .map(item => item.movie)
+    .slice(currentPage * PAGE_SIZE - PAGE_SIZE, currentPage * PAGE_SIZE)
 
   return (
     <Fragment>
@@ -42,14 +56,14 @@ const SearchPage = ({
         </form>
       </section>
       <Section
-        title={title}
-        url={url}
-        items={location.pathname === RoutePath.SEARCH ? fullItems : items}
+        title="Search Movies"
+        url={RoutePath.SEARCH}
+        items={fullItems}
         favorites={favorites}
         toggleFavorites={toggleFavorites}
         currentPage={currentPage}
-        totalItems={totalItems}
-        onPageChange={onPageChange}
+        totalItems={search.data.length}
+        onPageChange={handlePageChange}
       />
     </Fragment>
   )
