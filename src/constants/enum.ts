@@ -39,7 +39,8 @@ export enum LocalStorageKey {
   SEARCH_QUERY = "search_query",
   GENRE = "genre",
   YEAR = "year",
-  SORT_BY = "sort_by"
+  SORT_BY = "sort_by",
+  FETCHING = "fetching_results"
 }
 
 export enum MovieSortLabel {

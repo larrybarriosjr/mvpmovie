@@ -9,6 +9,7 @@ import { PAGE_SIZE } from "constants/default"
 import { EmptyText, MovieSort, RoutePath } from "constants/enum"
 import { useSearchMovie } from "hooks/api"
 import {
+  useFetchingResults,
   useGenre,
   useMovieSort,
   useSearchInput,
@@ -22,6 +23,7 @@ const SearchPage = () => {
   const [searchInput] = useSearchInput()
   const [currentPage, setCurrentPage] = useSearchPage()
   const [searchQuery, setSearchQuery] = useSearchQuery()
+  const [fetchingResults, setFetchingResults] = useFetchingResults()
 
   const [genre] = useGenre()
   const [year] = useYear()
@@ -41,6 +43,7 @@ const SearchPage = () => {
   const handleSubmitSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setSearchQuery(searchInput)
+    setFetchingResults(true)
   }
 
   useEffect(() => {
@@ -49,8 +52,10 @@ const SearchPage = () => {
 
   useEffect(() => {
     if (!searchQuery) return
+    if (!fetchingResults) return
     fetchSearch()
-  }, [searchQuery, fetchSearch])
+    setFetchingResults(false)
+  }, [searchQuery, fetchSearch, fetchingResults, setFetchingResults])
 
   const fullItems = search?.data
     .map(item => item.movie)

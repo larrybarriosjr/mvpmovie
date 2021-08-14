@@ -1,6 +1,6 @@
 import clsx from "clsx"
 import { RoutePath } from "constants/enum"
-import { useSearchInput, useSearchQuery } from "hooks/localStorage"
+import { useFetchingResults, useSearchInput, useSearchQuery } from "hooks/localStorage"
 import { ChangeEvent, KeyboardEvent } from "react"
 import { RiSearchLine } from "react-icons/ri"
 import { useHistory } from "react-router-dom"
@@ -12,6 +12,7 @@ type SearchbarProps = {
 const Searchbar = ({ standalone }: SearchbarProps) => {
   const history = useHistory()
   const [value, setValue] = useSearchInput()
+  const [, setFetchingResults] = useFetchingResults()
   const [, setQuery] = useSearchQuery()
 
   const inputClasses = clsx([
@@ -26,6 +27,7 @@ const Searchbar = ({ standalone }: SearchbarProps) => {
   const handleMovieSearch = (e: KeyboardEvent<HTMLInputElement>) => {
     if (standalone && value && e.key === "Enter") {
       setQuery(value)
+      setFetchingResults(true)
       history.push(RoutePath.SEARCH)
     }
   }
