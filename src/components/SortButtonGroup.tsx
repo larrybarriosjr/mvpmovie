@@ -1,10 +1,11 @@
+import { useLocalStorageValue } from "@react-hookz/web"
 import clsx from "clsx"
-import { MovieSort } from "constants/enum"
+import { LocalStorageKey, MovieSort } from "constants/enum"
 import { sortItems } from "constants/items"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect } from "react"
 
 const SortButtonGroup = () => {
-  const [sortBy, setSortBy] = useState<MovieSort>(MovieSort.AZ)
+  const [sortBy, setSortBy] = useLocalStorageValue<MovieSort>(LocalStorageKey.SORT_BY, MovieSort.LATEST)
 
   const sortClasses = (sort: MovieSort) =>
     clsx([
@@ -15,6 +16,10 @@ const SortButtonGroup = () => {
   const handleMovieSort = (e: ChangeEvent<HTMLInputElement>) => {
     setSortBy(e.target.value as MovieSort)
   }
+
+  useEffect(() => {
+    if (!sortBy) setSortBy(MovieSort.LATEST)
+  }, [sortBy, setSortBy])
 
   return (
     <div className="flex items-center gap-x-4">

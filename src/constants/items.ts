@@ -9,6 +9,6 @@ export const routes: RouteItemType[] = [
 ]
 
 export const sortItems: MovieSortItemType[] = [
-  { label: MovieSortLabel.AZ, value: MovieSort.AZ },
-  { label: MovieSortLabel.YR, value: MovieSort.YR }
+  { label: MovieSortLabel.ALPHABETICAL, value: MovieSort.ALPHABETICAL },
+  { label: MovieSortLabel.LATEST, value: MovieSort.LATEST }
 ]

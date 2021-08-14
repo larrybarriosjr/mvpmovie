@@ -38,15 +38,16 @@ export enum LocalStorageKey {
   SEARCH_INPUT = "search_input",
   SEARCH_QUERY = "search_query",
   GENRE = "genre",
-  YEAR = "year"
+  YEAR = "year",
+  SORT_BY = "sort_by"
 }
 
 export enum MovieSortLabel {
-  AZ = "Alphabetical",
-  YR = "By Year"
+  ALPHABETICAL = "Alphabetical",
+  LATEST = "Latest Release"
 }
 
 export enum MovieSort {
-  AZ = "alphabetical",
-  YR = "by_year"
+  ALPHABETICAL = "alphabetical",
+  LATEST = "latest"
 }

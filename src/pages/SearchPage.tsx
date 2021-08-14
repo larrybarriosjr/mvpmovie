@@ -7,7 +7,7 @@ import Section from "components/Section"
 import SortButtonGroup from "components/SortButtonGroup"
 import YearPicker from "components/YearPicker"
 import { PAGE_SIZE } from "constants/default"
-import { LocalStorageKey, RoutePath } from "constants/enum"
+import { LocalStorageKey, MovieSort, RoutePath } from "constants/enum"
 import { useSearchMovie } from "hooks/api"
 import { Fragment, useEffect } from "react"
 import { MovieType } from "types/movies"
@@ -24,6 +24,7 @@ const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
 
   const [genre] = useLocalStorageValue<string>(LocalStorageKey.GENRE, "")
   const [year] = useLocalStorageValue<string>(LocalStorageKey.YEAR, "")
+  const [sortBy] = useLocalStorageValue<string>(LocalStorageKey.SORT_BY, "")
 
   const {
     data: search,
@@ -54,6 +55,7 @@ const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
 
   const fullItems = search.data
     .map(item => item.movie)
+    .sort((a, b) => (sortBy === MovieSort.ALPHABETICAL ? a.title.localeCompare(b.title) : b.year - a.year))
     .slice(currentPage * PAGE_SIZE - PAGE_SIZE, currentPage * PAGE_SIZE)
 
   return (
