@@ -35,6 +35,7 @@ export enum LocalStorageKey {
   FAVORITES_PAGE = "favorites_page",
   FAVORITES_LAST_PAGE = "favorites_last_page",
   SEARCH_PAGE = "search_page",
+  SEARCH_INPUT = "search_input",
   SEARCH_QUERY = "search_query",
   GENRE = "genre",
   YEAR = "year"

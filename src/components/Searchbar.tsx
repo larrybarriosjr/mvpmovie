@@ -1,7 +1,7 @@
 import { useLocalStorageValue } from "@react-hookz/web"
 import clsx from "clsx"
 import { LocalStorageKey, RoutePath } from "constants/enum"
-import { ChangeEvent, KeyboardEvent, useState } from "react"
+import { ChangeEvent, KeyboardEvent } from "react"
 import { RiSearchLine } from "react-icons/ri"
 import { useHistory } from "react-router-dom"
 
@@ -11,7 +11,7 @@ type SearchbarProps = {
 
 const Searchbar = ({ standalone }: SearchbarProps) => {
   const history = useHistory()
-  const [value, setValue] = useState<string>("")
+  const [value, setValue] = useLocalStorageValue<string>(LocalStorageKey.SEARCH_INPUT, "")
   const [, setQuery] = useLocalStorageValue<string>(LocalStorageKey.SEARCH_QUERY, "")
 
   const inputClasses = clsx([
