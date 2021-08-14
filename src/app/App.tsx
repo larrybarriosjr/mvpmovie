@@ -1,20 +1,19 @@
 import Footer from "components/Footer"
 import Loading from "components/Loading"
 import Navbar from "components/Navbar"
-import { PAGE_SIZE } from "constants/default"
 import { EmptyText, RoutePath } from "constants/enum"
 import { ITEM_COUNT } from "constants/env"
 import { useGetPopular, useGetTrending } from "hooks/api"
 import {
-  useFaveLastPage,
-  useFavorites,
   useFavoritesPage,
   useGenre,
   usePopularPage,
   useSearchInput,
+  useSearchPage,
   useTrendingPage,
   useYear
 } from "hooks/localStorage"
+import FavoritesPage from "pages/FavoritesPage"
 import HomePage from "pages/HomePage"
 import ListPage from "pages/ListPage"
 import SearchPage from "pages/SearchPage"
@@ -24,14 +23,13 @@ import { Route, Switch, useLocation } from "react-router-dom"
 function App() {
   const location = useLocation()
   const [loading, setLoading] = useState(false)
+
   const [popularPage, setPopularPage] = usePopularPage()
   const [trendingPage, setTrendingPage] = useTrendingPage()
   const [favoritesPage, setFavoritesPage] = useFavoritesPage()
-  const [faveLastPage, setFaveLastPage] = useFaveLastPage()
-
-  const [favorites, setFavorites] = useFavorites()
 
   const [, setSearchInput] = useSearchInput()
+  const [, setSearchPage] = useSearchPage()
   const [, setGenre] = useGenre()
   const [, setYear] = useYear()
 
@@ -58,36 +56,25 @@ function App() {
     if (location.pathname !== RoutePath.POPULAR || !popularPage) setPopularPage(1)
     if (location.pathname !== RoutePath.TRENDING || !trendingPage) setTrendingPage(1)
     if (location.pathname !== RoutePath.FAVORITES || !favoritesPage) setFavoritesPage(1)
+    if (location.pathname !== RoutePath.SEARCH) {
+      setSearchInput("")
+      setSearchPage(1)
+      setGenre("")
+      setYear("")
+    }
   }, [
-    location,
+    location.pathname,
     popularPage,
     trendingPage,
     favoritesPage,
     setPopularPage,
     setTrendingPage,
-    setFavoritesPage
+    setFavoritesPage,
+    setSearchInput,
+    setSearchPage,
+    setGenre,
+    setYear
   ])
-
-  useEffect(() => {
-    if (location.pathname !== RoutePath.SEARCH) {
-      setSearchInput("")
-      setGenre("")
-      setYear("")
-    }
-  }, [location.pathname, setGenre, setSearchInput, setYear])
-
-  useEffect(() => {
-    if (!favorites) setFavorites([])
-    if (!faveLastPage) setFaveLastPage(1)
-  }, [favorites, faveLastPage, setFavorites, setFaveLastPage])
-
-  useEffect(() => {
-    if (!favorites) return
-    if (!faveLastPage) return
-    const faveTotalPages = Math.ceil(favorites.length / PAGE_SIZE) || 1
-    if (faveLastPage !== faveTotalPages) setFaveLastPage(faveTotalPages)
-    if (favoritesPage > faveLastPage) setFavoritesPage(faveTotalPages)
-  }, [favorites, faveLastPage, favoritesPage, setFaveLastPage, setFavoritesPage])
 
   useEffect(() => {
     if (location.pathname === RoutePath.POPULAR) fetchPopular()
@@ -140,17 +127,7 @@ function App() {
               <Loading />
             )}
           </Route>
-          <Route exact path={RoutePath.FAVORITES}>
-            <ListPage
-              title="Your Favorite Movies"
-              url={RoutePath.FAVORITES}
-              items={favorites}
-              currentPage={favoritesPage}
-              totalItems={favorites.length}
-              onPageChange={handlePageChange(setFavoritesPage)}
-              emptyText={EmptyText.FAVORITES}
-            />
-          </Route>
+          <Route exact path={RoutePath.FAVORITES} component={FavoritesPage} />
           <Route exact path={RoutePath.SEARCH} component={SearchPage} />
         </Switch>
       </main>
