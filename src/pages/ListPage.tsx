@@ -1,3 +1,4 @@
+import Loading from "components/Loading"
 import Section from "components/Section"
 import { RoutePath } from "constants/enum"
 import { MovieType } from "types/movies"
@@ -5,11 +6,12 @@ import { MovieType } from "types/movies"
 type ListPageProps = {
   title: string
   url: RoutePath
-  items: MovieType[]
+  items?: MovieType[]
   currentPage: number
   totalItems: number
   onPageChange: (page: number) => void
   emptyText: string
+  loading: boolean
 }
 
 const ListPage = ({
@@ -19,8 +21,11 @@ const ListPage = ({
   currentPage,
   totalItems,
   onPageChange,
-  emptyText
+  emptyText,
+  loading
 }: ListPageProps) => {
+  if (!items || loading) return <Loading />
+
   return (
     <Section
       title={title}
