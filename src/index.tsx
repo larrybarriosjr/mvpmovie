@@ -3,7 +3,6 @@ import ScrollToTop from "components/ScrollToTop"
 import React from "react"
 import ReactDOM from "react-dom"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { ReactQueryDevtools } from "react-query/devtools"
 import { BrowserRouter } from "react-router-dom"
 import "styles/lib.css"
 import "./index.css"
@@ -28,7 +27,6 @@ ReactDOM.render(
         <ScrollToTop />
         <App />
       </BrowserRouter>
-      <ReactQueryDevtools position="bottom-right" />
     </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById("root")
