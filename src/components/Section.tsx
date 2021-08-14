@@ -18,9 +18,19 @@ type SectionProps = {
   currentPage?: number
   totalItems?: number
   onPageChange?: (page: number, pageSize: number) => void
+  emptyText: string
 }
 
-const Section = ({ title, url, items, quantity, currentPage, totalItems, onPageChange }: SectionProps) => {
+const Section = ({
+  title,
+  url,
+  items,
+  quantity,
+  currentPage,
+  totalItems,
+  onPageChange,
+  emptyText
+}: SectionProps) => {
   const imageUrls = useGetImageUrls(items)
   const [favorites, setFavorites] = useFavorites()
 
@@ -80,12 +90,9 @@ const Section = ({ title, url, items, quantity, currentPage, totalItems, onPageC
               </li>
             ))}
         </ul>
-      ) : url === RoutePath.FAVORITES ? (
-        <div className="mt-8 mb-16 text-lg text-center">
-          <p>You haven&apos;t added your favorite movies yet.</p>
-          <p>Click on one of the movie posters to add one.</p>
-        </div>
-      ) : null}
+      ) : (
+        <p className="mx-auto my-16 text-lg text-center text-white w-96">{emptyText}</p>
+      )}
       {currentPage && totalItems && onPageChange ? (
         <Pagination
           className="flex items-center justify-center my-4 text-lg gap-x-4"

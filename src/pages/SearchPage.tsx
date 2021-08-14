@@ -6,7 +6,7 @@ import Section from "components/Section"
 import SortButtonGroup from "components/SortButtonGroup"
 import YearPicker from "components/YearPicker"
 import { PAGE_SIZE } from "constants/default"
-import { MovieSort, RoutePath } from "constants/enum"
+import { EmptyText, MovieSort, RoutePath } from "constants/enum"
 import { useSearchMovie } from "hooks/api"
 import {
   useGenre,
@@ -76,9 +76,8 @@ const SearchPage = () => {
           currentPage={currentPage}
           totalItems={search.data.length}
           onPageChange={handlePageChange}
+          emptyText={EmptyText.SEARCH}
         />
-      ) : !search?.data.length ? (
-        <p className="w-full mt-16 text-lg text-center text-white">No movies found.</p>
       ) : (
         <Loading />
       )}

@@ -11,9 +11,18 @@ type ListPageProps = {
   currentPage: number
   totalItems: number
   onPageChange: (page: number) => void
+  emptyText: string
 }
 
-const ListPage = ({ title, url, items, currentPage, totalItems, onPageChange }: ListPageProps) => {
+const ListPage = ({
+  title,
+  url,
+  items,
+  currentPage,
+  totalItems,
+  onPageChange,
+  emptyText
+}: ListPageProps) => {
   const location = useLocation()
   const fullItems = items.slice(currentPage * PAGE_SIZE - PAGE_SIZE, currentPage * PAGE_SIZE)
 
@@ -25,6 +34,7 @@ const ListPage = ({ title, url, items, currentPage, totalItems, onPageChange }: 
       currentPage={currentPage}
       totalItems={totalItems}
       onPageChange={onPageChange}
+      emptyText={emptyText}
     />
   )
 }

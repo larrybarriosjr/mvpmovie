@@ -170,6 +170,7 @@ function App() {
                 currentPage={popularPage}
                 totalItems={popular.headers[ITEM_COUNT]}
                 onPageChange={handlePageChange(setPopularPage)}
+                emptyText={EmptyText.POPULAR}
               />
             ) : (
               <Loading />
@@ -184,6 +185,7 @@ function App() {
                 currentPage={trendingPage}
                 totalItems={trending.headers[ITEM_COUNT]}
                 onPageChange={handlePageChange(setTrendingPage)}
+                emptyText={EmptyText.TRENDING}
               />
             ) : (
               <Loading />
@@ -197,11 +199,10 @@ function App() {
               currentPage={favoritesPage}
               totalItems={favorites.length}
               onPageChange={handlePageChange(setFavoritesPage)}
+              emptyText={EmptyText.FAVORITES}
             />
           </Route>
-          <Route exact path={RoutePath.SEARCH}>
-            <SearchPage />
-          </Route>
+          <Route exact path={RoutePath.SEARCH} component={SearchPage} />
         </Switch>
       </main>
       <Footer />

@@ -51,3 +51,10 @@ export enum MovieSort {
   ALPHABETICAL = "alphabetical",
   LATEST = "latest"
 }
+
+export enum EmptyText {
+  POPULAR = "No popular movies found. Make sure you're online.",
+  TRENDING = "No trending movies found. Make sure you're online.",
+  FAVORITES = "You haven't added your favorite movies yet. Click on one of the movie posters to add one.",
+  SEARCH = "No movies found. Please make sure the query is spelled correctly."
+}
