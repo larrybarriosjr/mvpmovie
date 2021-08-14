@@ -68,7 +68,7 @@ const SearchPage = () => {
         </form>
         <SortButtonGroup />
       </section>
-      {!searchIsLoading && !searchIsFetching && search?.data.length && fullItems ? (
+      {!searchIsLoading && !searchIsFetching && search?.data && fullItems ? (
         <Section
           title="Search Movies"
           url={RoutePath.SEARCH}
