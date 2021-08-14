@@ -2,6 +2,7 @@ import { MAX_ITEMS, PAGE_SIZE } from "constants/default"
 import { RoutePath } from "constants/enum"
 import { IMAGE_URL } from "constants/env"
 import { useGetImageUrls } from "hooks/api"
+import { useFavorites } from "hooks/localStorage"
 import Pagination from "rc-pagination"
 import EnUsLocale from "rc-pagination/lib/locale/en_US"
 import { RiArrowLeftSFill, RiArrowRightSFill, RiMoreFill } from "react-icons/ri"
@@ -14,28 +15,23 @@ type SectionProps = {
   url: RoutePath
   items: MovieType[]
   quantity?: number
-  favorites: MovieType[]
-  toggleFavorites: (movie: MovieType) => void
   currentPage?: number
   totalItems?: number
   onPageChange?: (page: number, pageSize: number) => void
 }
 
-const Section = ({
-  title,
-  url,
-  items,
-  quantity,
-  favorites,
-  toggleFavorites,
-  currentPage,
-  totalItems,
-  onPageChange
-}: SectionProps) => {
+const Section = ({ title, url, items, quantity, currentPage, totalItems, onPageChange }: SectionProps) => {
   const imageUrls = useGetImageUrls(items)
+  const [favorites, setFavorites] = useFavorites()
 
   const movieUrl = (movie: MovieType) => {
     return imageUrls.filter(item => item.id === movie.ids.tmdb)[0]
+  }
+
+  const handleToggleFavorites = (movie: MovieType) => {
+    favorites.find(fave => fave.ids.trakt === movie.ids.trakt)
+      ? setFavorites(favorites.filter(fave => fave.ids.trakt !== movie.ids.trakt))
+      : setFavorites([...favorites, movie])
   }
 
   return (
@@ -61,12 +57,12 @@ const Section = ({
                     src={IMAGE_URL + movieUrl(movie).url}
                     alt={movie.title}
                     className="object-cover h-full border border-white border-solid cursor-pointer w-60"
-                    onClick={() => toggleFavorites(movie)}
+                    onClick={() => handleToggleFavorites(movie)}
                   />
                   <button
                     type="button"
                     className="absolute rounded-full right-2 bottom-2 bg-gray"
-                    onClick={() => toggleFavorites(movie)}
+                    onClick={() => handleToggleFavorites(movie)}
                   >
                     {favorites.find(fave => fave.ids.trakt === movie.ids.trakt) ? (
                       <TiStarFullOutline size="36" className="text-primary" />

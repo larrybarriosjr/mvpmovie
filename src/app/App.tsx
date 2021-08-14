@@ -55,12 +55,6 @@ function App() {
     isLoading: homeTrendingIsLoading
   } = useGetTrending(1, HOME_TRENDING_SIZE)
 
-  const handleToggleFavorites = (movie: MovieType) => {
-    favorites.find(fave => fave.ids.trakt === movie.ids.trakt)
-      ? setFavorites(favorites.filter(fave => fave.ids.trakt !== movie.ids.trakt))
-      : setFavorites([...favorites, movie])
-  }
-
   const handlePageChange = (setter: (value: number) => void) => (page: number) => {
     setter(page)
     setLoading(true)
@@ -148,8 +142,6 @@ function App() {
               <HomePage
                 popular={homePopular.data}
                 trending={homeTrending.data.map(item => item.movie)}
-                favorites={favorites}
-                toggleFavorites={handleToggleFavorites}
                 loading={
                   homePopularIsLoading ||
                   homePopularIsFetching ||
@@ -167,8 +159,6 @@ function App() {
                 title="Popular Movies"
                 url={RoutePath.POPULAR}
                 items={popular.data}
-                favorites={favorites}
-                toggleFavorites={handleToggleFavorites}
                 currentPage={popularPage}
                 totalItems={popular.headers[ITEM_COUNT]}
                 onPageChange={handlePageChange(setPopularPage)}
@@ -183,8 +173,6 @@ function App() {
                 title="Trending Movies"
                 url={RoutePath.TRENDING}
                 items={trending.data.map(item => item.movie)}
-                favorites={favorites}
-                toggleFavorites={handleToggleFavorites}
                 currentPage={trendingPage}
                 totalItems={trending.headers[ITEM_COUNT]}
                 onPageChange={handlePageChange(setTrendingPage)}
@@ -198,15 +186,13 @@ function App() {
               title="Your Favorite Movies"
               url={RoutePath.FAVORITES}
               items={favorites}
-              favorites={favorites}
-              toggleFavorites={handleToggleFavorites}
               currentPage={favoritesPage}
               totalItems={favorites.length}
               onPageChange={handlePageChange(setFavoritesPage)}
             />
           </Route>
           <Route exact path={RoutePath.SEARCH}>
-            <SearchPage favorites={favorites} toggleFavorites={handleToggleFavorites} />
+            <SearchPage />
           </Route>
         </Switch>
       </main>

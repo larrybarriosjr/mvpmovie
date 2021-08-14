@@ -10,14 +10,8 @@ import { PAGE_SIZE } from "constants/default"
 import { LocalStorageKey, MovieSort, RoutePath } from "constants/enum"
 import { useSearchMovie } from "hooks/api"
 import { FormEvent, Fragment, useEffect } from "react"
-import { MovieType } from "types/movies"
 
-type SearchPageProps = {
-  favorites: MovieType[]
-  toggleFavorites: (movie: MovieType) => void
-}
-
-const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
+const SearchPage = () => {
   const [searchInput] = useLocalStorageValue<string>(LocalStorageKey.SEARCH_INPUT, "")
   const [currentPage, setCurrentPage] = useLocalStorageValue<number>(LocalStorageKey.SEARCH_PAGE, 0)
   const [searchQuery, setSearchQuery] = useLocalStorageValue<string>(LocalStorageKey.SEARCH_QUERY, "")
@@ -72,8 +66,6 @@ const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
           title="Search Movies"
           url={RoutePath.SEARCH}
           items={fullItems}
-          favorites={favorites}
-          toggleFavorites={toggleFavorites}
           currentPage={currentPage}
           totalItems={search.data.length}
           onPageChange={handlePageChange}
