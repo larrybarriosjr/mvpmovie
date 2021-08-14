@@ -9,7 +9,7 @@ import YearPicker from "components/YearPicker"
 import { PAGE_SIZE } from "constants/default"
 import { LocalStorageKey, MovieSort, RoutePath } from "constants/enum"
 import { useSearchMovie } from "hooks/api"
-import { Fragment, useEffect } from "react"
+import { FormEvent, Fragment, useEffect } from "react"
 import { MovieType } from "types/movies"
 
 type SearchPageProps = {
@@ -37,7 +37,8 @@ const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
     setCurrentPage(page)
   }
 
-  const handleSubmitSearch = () => {
+  const handleSubmitSearch = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     setSearchQuery(searchInput)
   }
 
@@ -50,10 +51,7 @@ const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
     fetchSearch()
   }, [searchQuery, fetchSearch])
 
-  if (!search) return null
-  if (searchIsLoading || searchIsFetching) return <Loading />
-
-  const fullItems = search.data
+  const fullItems = search?.data
     .map(item => item.movie)
     .sort((a, b) => (sortBy === MovieSort.ALPHABETICAL ? a.title.localeCompare(b.title) : b.year - a.year))
     .slice(currentPage * PAGE_SIZE - PAGE_SIZE, currentPage * PAGE_SIZE)
@@ -69,16 +67,22 @@ const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
         </form>
         <SortButtonGroup />
       </section>
-      <Section
-        title="Search Movies"
-        url={RoutePath.SEARCH}
-        items={fullItems}
-        favorites={favorites}
-        toggleFavorites={toggleFavorites}
-        currentPage={currentPage}
-        totalItems={search.data.length}
-        onPageChange={handlePageChange}
-      />
+      {!searchIsLoading && !searchIsFetching && search?.data.length && fullItems ? (
+        <Section
+          title="Search Movies"
+          url={RoutePath.SEARCH}
+          items={fullItems}
+          favorites={favorites}
+          toggleFavorites={toggleFavorites}
+          currentPage={currentPage}
+          totalItems={search.data.length}
+          onPageChange={handlePageChange}
+        />
+      ) : !search?.data.length ? (
+        <p className="w-full mt-16 text-lg text-center text-white">No movies found.</p>
+      ) : (
+        <Loading />
+      )}
     </Fragment>
   )
 }
