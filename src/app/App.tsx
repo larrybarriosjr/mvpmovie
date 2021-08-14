@@ -23,6 +23,10 @@ function App() {
 
   const [favorites, setFavorites] = useLocalStorage<MovieType[]>(LocalStorageKey.FAVORITES, [])
 
+  const [, setSearchInput] = useLocalStorage<string>(LocalStorageKey.SEARCH_INPUT, "")
+  const [, setGenre] = useLocalStorage<string>(LocalStorageKey.GENRE, "")
+  const [, setYear] = useLocalStorage<string>(LocalStorageKey.YEAR, "")
+
   const {
     data: popular,
     refetch: fetchPopular,
@@ -75,6 +79,14 @@ function App() {
     setTrendingPage,
     setFavoritesPage
   ])
+
+  useEffect(() => {
+    if (location.pathname !== RoutePath.SEARCH) {
+      setSearchInput("")
+      setGenre("")
+      setYear("")
+    }
+  }, [location.pathname, setGenre, setSearchInput, setYear])
 
   useEffect(() => {
     if (!favorites) setFavorites([])

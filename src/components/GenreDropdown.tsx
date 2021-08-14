@@ -8,7 +8,7 @@ import { ReactSelectOnChangeType, ReactSelectStyleType } from "types/lib"
 const GenreDropdown = () => {
   const { data: genres, refetch: fetchGenres } = useGetGenres()
 
-  const [, setGenre] = useLocalStorageValue<string>(LocalStorageKey.GENRE, "")
+  const [genre, setGenre] = useLocalStorageValue<string>(LocalStorageKey.GENRE, "")
 
   const dropdownStyles: ReactSelectStyleType = {
     control: (base, state) => ({
@@ -47,6 +47,8 @@ const GenreDropdown = () => {
     })
   }
 
+  const options = genres?.data.map(item => ({ value: item.slug, label: item.name }))
+
   const handleValueChange: ReactSelectOnChangeType = (value, action) => {
     if (value) setGenre(value.value)
     if (action.action === "clear") setGenre("")
@@ -59,10 +61,11 @@ const GenreDropdown = () => {
   return (
     <Select
       placeholder="Select genre"
-      options={genres?.data.map(item => ({ value: item.slug, label: item.name }))}
+      options={options}
       styles={dropdownStyles}
       isSearchable={false}
       onChange={handleValueChange}
+      value={options?.find(item => item.value === genre)}
       isClearable
     />
   )

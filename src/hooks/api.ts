@@ -50,9 +50,17 @@ export const useGetImageUrls = (items: MovieType[]) => {
   return imageUrls
 }
 
-export const useSearchMovie = ({ query }: MovieSearchQueryType) => {
+export const useSearchMovie = ({ query, genre, year }: MovieSearchQueryType) => {
   const searchMovie = () =>
-    Axios.get(ApiRoutePath.SEARCH, { params: { query, fields: "title", limit: MAX_ITEMS } })
+    Axios.get(ApiRoutePath.SEARCH, {
+      params: {
+        query,
+        fields: "title",
+        limit: MAX_ITEMS,
+        genres: genre || undefined,
+        years: year || undefined
+      }
+    })
   return useQuery<AxiosResponse<SearchMovieType[]>>(ApiRouteKey.SEARCH, searchMovie)
 }
 

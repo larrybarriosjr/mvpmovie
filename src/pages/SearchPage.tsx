@@ -21,12 +21,15 @@ const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
   const [currentPage, setCurrentPage] = useLocalStorageValue<number>(LocalStorageKey.SEARCH_PAGE, 0)
   const [searchQuery, setSearchQuery] = useLocalStorageValue<string>(LocalStorageKey.SEARCH_QUERY, "")
 
+  const [genre] = useLocalStorageValue<string>(LocalStorageKey.GENRE, "")
+  const [year] = useLocalStorageValue<string>(LocalStorageKey.YEAR, "")
+
   const {
     data: search,
     refetch: fetchSearch,
     isFetching: searchIsFetching,
     isLoading: searchIsLoading
-  } = useSearchMovie({ query: searchQuery })
+  } = useSearchMovie({ query: searchQuery, genre, year })
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)

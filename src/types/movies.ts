@@ -34,6 +34,8 @@ export type MovieImageUrlType = {
 
 export type MovieSearchQueryType = {
   query: string
+  genre?: string
+  year?: string
 }
 
 export type SearchMovieType = {
