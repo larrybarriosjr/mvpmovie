@@ -1,3 +1,4 @@
+/* RC Pagination Custom Styles*/
 .rc-pagination > li:hover {
   color: var(--primary);
   cursor: pointer;
@@ -10,4 +11,52 @@
 
 .rc-pagination-disabled {
   display: none;
+}
+
+/* React Datepicker Custom Styles */
+.react-datepicker__navigation {
+  padding-top: 0.75rem;
+}
+
+.react-datepicker__header {
+  font-family: Raleway;
+  background: var(--primary);
+}
+
+.react-datepicker__year {
+  margin: 0;
+  font-family: Raleway;
+  font-size: 1rem;
+  background: var(--black);
+}
+
+.react-datepicker__year-text {
+  color: var(--white);
+  border: 2px solid var(--black);
+}
+
+.react-datepicker__year-text--selected,
+.react-datepicker__year-text--keyboard-selected {
+  font-weight: bold;
+  color: var(--white);
+  background: var(--primary);
+}
+
+.react-datepicker__year-text--disabled {
+  color: var(--gray);
+}
+
+.react-datepicker__year-text:hover {
+  background: var(--black);
+  border-color: var(--primary);
+}
+
+.react-datepicker__year-text--disabled:hover {
+  background: var(--black);
+  border-color: var(--black);
+  cursor: not-allowed;
+}
+
+.react-datepicker__year-wrapper {
+  justify-content: center;
 }

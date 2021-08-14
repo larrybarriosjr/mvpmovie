@@ -22,7 +22,6 @@ const Searchbar = () => {
   const handleMovieSearch = (e: KeyboardEvent<HTMLInputElement>) => {
     if (value && e.key === "Enter") {
       setQuery(value)
-      setValue("")
       history.push(RoutePath.SEARCH)
     }
   }

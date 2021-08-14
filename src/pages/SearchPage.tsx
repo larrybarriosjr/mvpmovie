@@ -1,6 +1,7 @@
 import clsx from "clsx"
 import GenreDropdown from "components/GenreDropdown"
 import Section from "components/Section"
+import YearPicker from "components/YearPicker"
 import { PAGE_SIZE } from "constants/default"
 import { RoutePath } from "constants/enum"
 import { ChangeEvent, Fragment, useState } from "react"
@@ -59,6 +60,7 @@ const SearchPage = ({
             />
           </label>
           <GenreDropdown />
+          <YearPicker />
         </form>
       </section>
       <Section

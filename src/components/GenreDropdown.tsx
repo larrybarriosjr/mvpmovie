@@ -39,7 +39,7 @@ const GenreDropdown = () => {
     }),
     singleValue: base => ({
       ...base,
-      color: "var(--primary)",
+      color: "var(--white)",
       fontWeight: "bold"
     })
   }
