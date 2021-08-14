@@ -2,6 +2,7 @@ import { useLocalStorageValue } from "@react-hookz/web"
 import GenreDropdown from "components/GenreDropdown"
 import Loading from "components/Loading"
 import Searchbar from "components/Searchbar"
+import SearchButton from "components/SearchButton"
 import Section from "components/Section"
 import YearPicker from "components/YearPicker"
 import { PAGE_SIZE } from "constants/default"
@@ -16,8 +17,9 @@ type SearchPageProps = {
 }
 
 const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
+  const [searchInput] = useLocalStorageValue<string>(LocalStorageKey.SEARCH_INPUT, "")
   const [currentPage, setCurrentPage] = useLocalStorageValue<number>(LocalStorageKey.SEARCH_PAGE, 0)
-  const [searchQuery] = useLocalStorageValue<string>(LocalStorageKey.SEARCH_QUERY, "")
+  const [searchQuery, setSearchQuery] = useLocalStorageValue<string>(LocalStorageKey.SEARCH_QUERY, "")
 
   const {
     data: search,
@@ -28,6 +30,10 @@ const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
+  }
+
+  const handleSubmitSearch = () => {
+    setSearchQuery(searchInput)
   }
 
   useEffect(() => {
@@ -49,10 +55,11 @@ const SearchPage = ({ favorites, toggleFavorites }: SearchPageProps) => {
   return (
     <Fragment>
       <section className="p-4">
-        <form className="flex justify-between w-full gap-4">
+        <form onSubmit={handleSubmitSearch} className="flex justify-between w-full gap-4">
           <Searchbar />
           <GenreDropdown />
           <YearPicker />
+          <SearchButton />
         </form>
       </section>
       <Section

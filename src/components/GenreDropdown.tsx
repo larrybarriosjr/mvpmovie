@@ -13,6 +13,8 @@ const GenreDropdown = () => {
   const dropdownStyles: ReactSelectStyleType = {
     control: (base, state) => ({
       ...base,
+      color: "var(--white)",
+      width: "240px",
       background: "var(--black)",
       borderWidth: "2px",
       borderRadius: "9999px",
@@ -21,6 +23,7 @@ const GenreDropdown = () => {
       paddingBottom: "0.15em",
       border: state.isFocused ? "2px solid var(--primary)" : "",
       boxShadow: "none",
+      whiteSpace: "nowrap",
       ":hover": {
         borderColor: "var(--primary)"
       }
@@ -55,7 +58,6 @@ const GenreDropdown = () => {
 
   return (
     <Select
-      className="text-white w-72"
       placeholder="Select genre"
       options={genres?.data.map(item => ({ value: item.slug, label: item.name }))}
       styles={dropdownStyles}
