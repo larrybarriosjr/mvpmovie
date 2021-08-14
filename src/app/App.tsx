@@ -1,8 +1,8 @@
 import Footer from "components/Footer"
 import Loading from "components/Loading"
 import Navbar from "components/Navbar"
-import { HOME_POPULAR_SIZE, HOME_TRENDING_SIZE, PAGE_SIZE } from "constants/default"
-import { RoutePath } from "constants/enum"
+import { PAGE_SIZE } from "constants/default"
+import { EmptyText, RoutePath } from "constants/enum"
 import { ITEM_COUNT } from "constants/env"
 import { useGetPopular, useGetTrending } from "hooks/api"
 import {
@@ -43,25 +43,11 @@ function App() {
   } = useGetPopular(popularPage)
 
   const {
-    data: homePopular,
-    refetch: fetchHomePopular,
-    isFetching: homePopularIsFetching,
-    isLoading: homePopularIsLoading
-  } = useGetPopular(1, HOME_POPULAR_SIZE)
-
-  const {
     data: trending,
     refetch: fetchTrending,
     isFetching: trendingIsFetching,
     isLoading: trendingIsLoading
   } = useGetTrending(trendingPage)
-
-  const {
-    data: homeTrending,
-    refetch: fetchHomeTrending,
-    isFetching: homeTrendingIsFetching,
-    isLoading: homeTrendingIsLoading
-  } = useGetTrending(1, HOME_TRENDING_SIZE)
 
   const handlePageChange = (setter: (value: number) => void) => (page: number) => {
     setter(page)
@@ -106,19 +92,7 @@ function App() {
   useEffect(() => {
     if (location.pathname === RoutePath.POPULAR) fetchPopular()
     if (location.pathname === RoutePath.TRENDING) fetchTrending()
-    if (location.pathname === RoutePath.HOME) {
-      fetchHomePopular()
-      fetchHomeTrending()
-    }
-  }, [
-    location,
-    popularPage,
-    fetchPopular,
-    trendingPage,
-    fetchTrending,
-    fetchHomePopular,
-    fetchHomeTrending
-  ])
+  }, [location, popularPage, fetchPopular, trendingPage, fetchTrending])
 
   useEffect(() => {
     if (popularIsFetching || popularIsLoading) return
@@ -130,37 +104,12 @@ function App() {
     setLoading(false)
   }, [trendingIsFetching, trendingIsLoading])
 
-  useEffect(() => {
-    if (homePopularIsFetching || homePopularIsLoading) return
-    setLoading(false)
-  }, [homePopularIsFetching, homePopularIsLoading])
-
-  useEffect(() => {
-    if (homeTrendingIsFetching || homeTrendingIsLoading) return
-    setLoading(false)
-  }, [homeTrendingIsFetching, homeTrendingIsLoading])
-
   return (
     <div className="flex flex-col w-full min-h-screen text-white bg-black">
       <Navbar />
       <main className="flex-grow w-full max-w-5xl px-2 mx-auto mt-28">
         <Switch>
-          <Route exact path={RoutePath.HOME}>
-            {!loading && homePopular && homeTrending ? (
-              <HomePage
-                popular={homePopular.data}
-                trending={homeTrending.data.map(item => item.movie)}
-                loading={
-                  homePopularIsLoading ||
-                  homePopularIsFetching ||
-                  homeTrendingIsLoading ||
-                  homeTrendingIsFetching
-                }
-              />
-            ) : (
-              <Loading />
-            )}
-          </Route>
+          <Route exact path={RoutePath.HOME} component={HomePage} />
           <Route exact path={RoutePath.POPULAR}>
             {!loading && popular ? (
               <ListPage
