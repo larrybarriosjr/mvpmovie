@@ -1,11 +1,11 @@
-import { useLocalStorageValue } from "@react-hookz/web"
 import clsx from "clsx"
-import { LocalStorageKey, MovieSort } from "constants/enum"
+import { MovieSort } from "constants/enum"
 import { sortItems } from "constants/items"
+import { useMovieSort } from "hooks/localStorage"
 import { ChangeEvent, useEffect } from "react"
 
 const SortButtonGroup = () => {
-  const [sortBy, setSortBy] = useLocalStorageValue<MovieSort>(LocalStorageKey.SORT_BY, MovieSort.LATEST)
+  const [sortBy, setSortBy] = useMovieSort()
 
   const sortClasses = (sort: MovieSort) =>
     clsx([

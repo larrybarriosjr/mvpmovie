@@ -1,4 +1,3 @@
-import { useLocalStorageValue } from "@react-hookz/web"
 import GenreDropdown from "components/GenreDropdown"
 import Loading from "components/Loading"
 import Searchbar from "components/Searchbar"
@@ -7,18 +6,26 @@ import Section from "components/Section"
 import SortButtonGroup from "components/SortButtonGroup"
 import YearPicker from "components/YearPicker"
 import { PAGE_SIZE } from "constants/default"
-import { LocalStorageKey, MovieSort, RoutePath } from "constants/enum"
+import { MovieSort, RoutePath } from "constants/enum"
 import { useSearchMovie } from "hooks/api"
+import {
+  useGenre,
+  useMovieSort,
+  useSearchInput,
+  useSearchPage,
+  useSearchQuery,
+  useYear
+} from "hooks/localStorage"
 import { FormEvent, Fragment, useEffect } from "react"
 
 const SearchPage = () => {
-  const [searchInput] = useLocalStorageValue<string>(LocalStorageKey.SEARCH_INPUT, "")
-  const [currentPage, setCurrentPage] = useLocalStorageValue<number>(LocalStorageKey.SEARCH_PAGE, 0)
-  const [searchQuery, setSearchQuery] = useLocalStorageValue<string>(LocalStorageKey.SEARCH_QUERY, "")
+  const [searchInput] = useSearchInput()
+  const [currentPage, setCurrentPage] = useSearchPage()
+  const [searchQuery, setSearchQuery] = useSearchQuery()
 
-  const [genre] = useLocalStorageValue<string>(LocalStorageKey.GENRE, "")
-  const [year] = useLocalStorageValue<string>(LocalStorageKey.YEAR, "")
-  const [sortBy] = useLocalStorageValue<string>(LocalStorageKey.SORT_BY, "")
+  const [genre] = useGenre()
+  const [year] = useYear()
+  const [sortBy] = useMovieSort()
 
   const {
     data: search,

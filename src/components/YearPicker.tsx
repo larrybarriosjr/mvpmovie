@@ -1,13 +1,12 @@
-import { useLocalStorageValue } from "@react-hookz/web"
 import clsx from "clsx"
-import { LocalStorageKey } from "constants/enum"
 import dayjs from "dayjs"
+import { useYear } from "hooks/localStorage"
 import { useEffect } from "react"
 import ReactDatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
 const YearPicker = () => {
-  const [year, setYear] = useLocalStorageValue<string>(LocalStorageKey.YEAR, "")
+  const [year, setYear] = useYear()
 
   const inputClasses = clsx([
     "w-full p-2 text-center bg-black border-2 rounded-full outline-none border-gray focus:border-primary",

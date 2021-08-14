@@ -1,14 +1,12 @@
-import { useLocalStorageValue } from "@react-hookz/web"
-import { LocalStorageKey } from "constants/enum"
 import { useGetGenres } from "hooks/api"
+import { useGenre } from "hooks/localStorage"
 import { useEffect } from "react"
 import Select from "react-select"
 import { ReactSelectOnChangeType, ReactSelectStyleType } from "types/lib"
 
 const GenreDropdown = () => {
   const { data: genres, refetch: fetchGenres } = useGetGenres()
-
-  const [genre, setGenre] = useLocalStorageValue<string>(LocalStorageKey.GENRE, "")
+  const [genre, setGenre] = useGenre()
 
   const dropdownStyles: ReactSelectStyleType = {
     control: (base, state) => ({

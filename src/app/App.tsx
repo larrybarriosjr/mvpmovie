@@ -1,31 +1,39 @@
-import { useLocalStorageValue as useLocalStorage } from "@react-hookz/web"
 import Footer from "components/Footer"
 import Loading from "components/Loading"
 import Navbar from "components/Navbar"
 import { HOME_POPULAR_SIZE, HOME_TRENDING_SIZE, PAGE_SIZE } from "constants/default"
-import { LocalStorageKey, RoutePath } from "constants/enum"
+import { RoutePath } from "constants/enum"
 import { ITEM_COUNT } from "constants/env"
 import { useGetPopular, useGetTrending } from "hooks/api"
+import {
+  useFaveLastPage,
+  useFavorites,
+  useFavoritesPage,
+  useGenre,
+  usePopularPage,
+  useSearchInput,
+  useTrendingPage,
+  useYear
+} from "hooks/localStorage"
 import HomePage from "pages/HomePage"
 import ListPage from "pages/ListPage"
 import SearchPage from "pages/SearchPage"
 import { useEffect, useState } from "react"
 import { Route, Switch, useLocation } from "react-router-dom"
-import { MovieType } from "types/movies"
 
 function App() {
   const location = useLocation()
   const [loading, setLoading] = useState(false)
-  const [popularPage, setPopularPage] = useLocalStorage<number>(LocalStorageKey.POPULAR_PAGE, 0)
-  const [trendingPage, setTrendingPage] = useLocalStorage<number>(LocalStorageKey.TRENDING_PAGE, 0)
-  const [favoritesPage, setFavoritesPage] = useLocalStorage<number>(LocalStorageKey.FAVORITES_PAGE, 0)
-  const [faveLastPage, setFaveLastPage] = useLocalStorage<number>(LocalStorageKey.FAVORITES_LAST_PAGE, 0)
+  const [popularPage, setPopularPage] = usePopularPage()
+  const [trendingPage, setTrendingPage] = useTrendingPage()
+  const [favoritesPage, setFavoritesPage] = useFavoritesPage()
+  const [faveLastPage, setFaveLastPage] = useFaveLastPage()
 
-  const [favorites, setFavorites] = useLocalStorage<MovieType[]>(LocalStorageKey.FAVORITES, [])
+  const [favorites, setFavorites] = useFavorites()
 
-  const [, setSearchInput] = useLocalStorage<string>(LocalStorageKey.SEARCH_INPUT, "")
-  const [, setGenre] = useLocalStorage<string>(LocalStorageKey.GENRE, "")
-  const [, setYear] = useLocalStorage<string>(LocalStorageKey.YEAR, "")
+  const [, setSearchInput] = useSearchInput()
+  const [, setGenre] = useGenre()
+  const [, setYear] = useYear()
 
   const {
     data: popular,

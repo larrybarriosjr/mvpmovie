@@ -7,6 +7,7 @@ import Searchbar from "./Searchbar"
 
 const Navbar = () => {
   const location = useLocation()
+
   const navItemClasses = (url: RoutePath) => {
     return clsx([
       "hover:text-primary",
