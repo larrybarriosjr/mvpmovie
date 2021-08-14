@@ -1,45 +1,72 @@
 import Loading from "components/Loading"
 import Section from "components/Section"
-import { RoutePath } from "constants/enum"
-import { Fragment } from "react"
-import { MovieType } from "types/movies"
+import { HOME_POPULAR_SIZE, HOME_TRENDING_SIZE } from "constants/default"
+import { EmptyText, RoutePath } from "constants/enum"
+import { useGetPopular, useGetTrending } from "hooks/api"
+import { useFavorites } from "hooks/localStorage"
+import { Fragment, useEffect } from "react"
+import { useLocation } from "react-router-dom"
 
-type HomePageProps = {
-  popular: MovieType[]
-  trending: MovieType[]
-  favorites: MovieType[]
-  toggleFavorites: (movie: MovieType) => void
-  loading?: boolean
-}
+const HomePage = () => {
+  const location = useLocation()
+  const [favorites] = useFavorites()
 
-const HomePage = ({ popular, trending, favorites, toggleFavorites, loading }: HomePageProps) => {
-  if (loading) return <Loading />
+  const {
+    data: popular,
+    refetch: fetchPopular,
+    isFetching: popularIsFetching,
+    isLoading: popularIsLoading
+  } = useGetPopular(1, HOME_POPULAR_SIZE)
+
+  const {
+    data: trending,
+    refetch: fetchTrending,
+    isFetching: trendingIsFetching,
+    isLoading: trendingIsLoading
+  } = useGetTrending(1, HOME_TRENDING_SIZE)
+
+  useEffect(() => {
+    if (location.pathname === RoutePath.HOME) {
+      fetchPopular()
+      fetchTrending()
+    }
+  }, [fetchPopular, fetchTrending, location.pathname])
+
+  if (
+    !popular ||
+    popularIsFetching ||
+    popularIsLoading ||
+    !trending ||
+    trendingIsFetching ||
+    trendingIsLoading
+  ) {
+    return <Loading />
+  }
 
   return (
     <Fragment>
       <Section
         title="Popular Movies"
         url={RoutePath.POPULAR}
-        items={popular}
+        items={popular.data}
         quantity={4}
-        favorites={favorites}
-        toggleFavorites={toggleFavorites}
+        emptyText={EmptyText.POPULAR}
       />
+
       <Section
         title="Trending Movies"
         url={RoutePath.TRENDING}
-        items={trending}
+        items={trending.data.map(item => item.movie)}
         quantity={8}
-        favorites={favorites}
-        toggleFavorites={toggleFavorites}
+        emptyText={EmptyText.TRENDING}
       />
+
       <Section
         title="Your Favorite Movies"
         url={RoutePath.FAVORITES}
         items={favorites}
         quantity={4}
-        favorites={favorites}
-        toggleFavorites={toggleFavorites}
+        emptyText={EmptyText.FAVORITES}
       />
     </Fragment>
   )
