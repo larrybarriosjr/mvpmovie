@@ -1,18 +1,32 @@
 import App from "app/App"
+import ScrollToTop from "components/ScrollToTop"
 import React from "react"
 import ReactDOM from "react-dom"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { ReactQueryDevtools } from "react-query/devtools"
+import { BrowserRouter } from "react-router-dom"
+import "styles/lib.css"
 import "./index.css"
 import reportWebVitals from "./reportWebVitals"
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      enabled: false,
+      staleTime: Infinity,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: "always"
+    }
+  }
+})
 
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
-      <ReactQueryDevtools position="bottom-right" />
+      <BrowserRouter>
+        <ScrollToTop />
+        <App />
+      </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById("root")

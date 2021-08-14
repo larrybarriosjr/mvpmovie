@@ -1,3 +1,6 @@
+Hosted in Netlify. Please view the site at
+[https://mvpmovie.larrybarriosjr.com](https://mvpmovie.larrybarriosjr.com).
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary: #daa520;
+  --black: #000000;
+  --white: #ffffff;
+  --gray: #333333;
+}
+
 /* Page
  * ========================================================================== */
 
